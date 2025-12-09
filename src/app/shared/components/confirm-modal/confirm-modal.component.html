@@ -1,0 +1,28 @@
+@if (visible) {
+  <div class="confirm-overlay" (click)="onCancel()">
+    <div class="confirm-dialog" (click)="$event.stopPropagation()">
+      <div class="dialog-icon">
+        <i [class]="icon"></i>
+      </div>
+      <div class="dialog-body">
+        <p class="eyebrow">Confirmação</p>
+        <h3>{{ title }}</h3>
+        <p class="subtitle">{{ message }}</p>
+      </div>
+      <div class="dialog-actions">
+        <button pButton class="p-button-text" type="button" (click)="onCancel()" [disabled]="loading">
+          {{ cancelLabel }}
+        </button>
+        <button
+          pButton
+          type="button"
+          [attr.icon]="confirmIcon || null"
+          class="p-button-danger"
+          (click)="onConfirm()"
+          [disabled]="loading">
+          {{ confirmLabel }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

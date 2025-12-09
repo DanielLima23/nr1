@@ -1,0 +1,37 @@
+<div class="top-page">
+
+  <div class="left-area">
+    <div class="title-wrapper">
+      @if (icon) {
+        <i [class]="icon + ' title-icon'"></i>
+      }
+      <h1 class="title">{{ title }}</h1>
+    </div>
+  </div>
+
+  <div class="actions">
+    @if (showBack) {
+      <button
+        pButton
+        type="button"
+        label="Voltar"
+        icon="pi pi-arrow-left"
+        class="back-btn"
+        (click)="handleBack($event)">
+      </button>
+    }
+    @if (showAdd) {
+      <button
+        pButton
+        type="button"
+        [label]="addLabel"
+        [icon]="addIcon"
+        class="add-btn"
+        [routerLink]="addLink || null"
+        [queryParams]="addQueryParams || null"
+        (click)="handleAdd($event)">
+      </button>
+    }
+  </div>
+
+</div>

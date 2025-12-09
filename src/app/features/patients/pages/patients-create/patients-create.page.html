@@ -1,0 +1,93 @@
+﻿<app-top-page
+  [title]="patientId ? 'Editar Paciente' : 'Novo Paciente'"
+  icon="pi pi-id-card"
+  [showBack]="true"
+  [backLink]="['/admin/pacientes']">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="form-card">
+    <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
+      <div class="field">
+        <label for="company">Empresa *</label>
+        <p-dropdown
+          id="company"
+          [options]="companies"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Selecione a empresa"
+          formControlName="companyId"
+          (onChange)="onCompanyChange($event.value)">
+        </p-dropdown>
+        @if (isInvalid('companyId')) {
+        <small class="error-msg">Selecione a empresa.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="sector">Setor *</label>
+        <p-dropdown
+          id="sector"
+          [options]="sectors"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Selecione o setor"
+          formControlName="sectorId"
+          (onChange)="onSectorChange($any(form.value).companyId, $event.value)">
+        </p-dropdown>
+        @if (isInvalid('sectorId')) {
+        <small class="error-msg">Selecione o setor.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="jobFunction">Funcao *</label>
+        <p-dropdown
+          id="jobFunction"
+          [options]="jobFunctions"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Selecione a funcao"
+          formControlName="jobFunctionId">
+        </p-dropdown>
+        @if (isInvalid('jobFunctionId')) {
+        <small class="error-msg">Selecione a funcao.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="name">Nome *</label>
+        <input id="name" type="text" formControlName="name" placeholder="Nome do paciente" />
+        @if (isInvalid('name')) {
+        <small class="error-msg">Informe o nome.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="birthDate">Nascimento *</label>
+        <input id="birthDate" type="date" formControlName="birthDate" />
+        @if (isInvalid('birthDate')) {
+        <small class="error-msg">Informe a data de nascimento.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="tenureMonths">Tempo na funcao (meses) *</label>
+        <input id="tenureMonths" type="number" formControlName="tenureMonths" min="0" />
+        @if (isInvalid('tenureMonths')) {
+        <small class="error-msg">Informe o tempo em meses (0 ou maior).</small>
+        }
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="ghost-btn" [routerLink]="['/admin/pacientes']">
+          Cancelar
+        </button>
+        <button type="submit" class="primary-btn">
+          <i class="pi pi-save"></i>
+          {{ patientId ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

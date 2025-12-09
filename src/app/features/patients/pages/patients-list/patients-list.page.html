@@ -1,0 +1,137 @@
+<app-top-page
+  title="Pacientes"
+  icon="pi pi-id-card"
+  [showAdd]="!!selectedCompanyId"
+  addLabel="Novo"
+  [addLink]="selectedCompanyId ? ['/admin/pacientes/criar'] : null"
+  [addQueryParams]="selectedCompanyId ? { companyId: selectedCompanyId } : null"
+  [showBack]="true"
+  [backLink]="'/admin/dashboard'">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="table-card">
+    <div class="table-header">
+      <div>
+        <p class="eyebrow">Registros</p>
+        <h3>Pacientes</h3>
+        <p class="subtitle">Selecione uma empresa para listar os pacientes.</p>
+      </div>
+      <div class="filters-inline">
+        <p-dropdown
+          [options]="(companies$ | async) ?? []"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Selecione uma empresa"
+          [ngModel]="selectedCompanyId"
+          (onChange)="onCompanyChange($event.value)">
+        </p-dropdown>
+      </div>
+    </div>
+
+    @if (selectedCompanyId && !loading()) {
+      <div class="table-scroll">
+        <p-table
+          [value]="(patients$ | async) ?? []"
+          class="accent-table"
+          [paginator]="false"
+          [rows]="10"
+          responsiveLayout="scroll"
+          [loading]="loading()">
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Nome</th>
+              <th>Empresa</th>
+              <th>Função</th>
+              <th>Tempo (meses)</th>
+              <th>Nascimento</th>
+              <th class="align-right">Ações</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td>{{ row.name }}</td>
+              <td>{{ row.companyId }}</td>
+              <td>{{ row.jobFunctionName || '-' }}</td>
+              <td>{{ row.tenureMonths }}</td>
+              <td>{{ row.birthDate | date:'dd/MM/yyyy' }}</td>
+              <td class="action-col">
+                <button
+                  pButton
+                  icon="pi pi-exclamation-triangle"
+                  class="p-button-text action-btn"
+                  [routerLink]="['/admin/pacientes', row.id, 'riscos']"
+                  [queryParams]="{ companyId: selectedCompanyId }"
+                  pTooltip="Riscos"
+                  tooltipPosition="top"
+                  appendTo="body">
+                </button>
+                <button
+                  pButton
+                  icon="pi pi-clipboard"
+                  class="p-button-text action-btn"
+                  [routerLink]="['/admin/pacientes', row.id, 'checklists']"
+                  [queryParams]="{ companyId: selectedCompanyId }"
+                  pTooltip="Checklists"
+                  tooltipPosition="top"
+                  appendTo="body">
+                </button>
+                <button
+                  pButton
+                  icon="pi pi-pencil"
+                  class="p-button-text action-btn"
+                  [routerLink]="['/admin/pacientes/editar', row.id]"
+                  [queryParams]="{ companyId: selectedCompanyId }"
+                  pTooltip="Editar paciente" tooltipPosition="top" appendTo="body">
+                </button>
+                <button
+                  pButton
+                  icon="pi pi-trash"
+                  class="p-button-text p-button-danger action-btn"
+                  (click)="remove(row)"
+                  [disabled]="deletingId === row.id"
+                  pTooltip="Remover paciente" tooltipPosition="top" appendTo="body">
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <div class="empty-state">
+              <i class="pi pi-id-card"></i>
+              <p>Nenhum paciente encontrado.</p>
+              <span>Cadastre um paciente para esta empresa.</span>
+            </div>
+          </ng-template>
+
+        </p-table>
+      </div>
+    } @else if (selectedCompanyId && loading()) {
+      <div class="table-skeleton">
+        @for (_ of [1, 2, 3, 4, 5]; track _) {
+          <div class="skeleton-row"></div>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <i class="pi pi-filter"></i>
+        <p>Selecione uma empresa para listar pacientes.</p>
+      </div>
+    }
+  </div>
+
+  <app-confirm-modal
+    [visible]="showConfirmModal"
+    [title]="'Remover ' + (selectedName || 'paciente') + '?'"
+    message="Esta ação é definitiva. Confirme para seguir."
+    confirmLabel="Remover"
+    cancelLabel="Cancelar"
+    icon="pi pi-trash"
+    [loading]="deletingId === selectedId"
+    (confirm)="confirmDelete()"
+    (cancel)="closeDeleteConfirm()">
+  </app-confirm-modal>
+</section>
+

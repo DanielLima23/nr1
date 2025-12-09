@@ -1,0 +1,65 @@
+﻿<app-top-page
+  [title]="riskId ? 'Editar Risco' : 'Novo Risco'"
+  icon="pi pi-exclamation-triangle"
+  [showBack]="true"
+  [backLink]="['/admin/riscos']">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="form-card">
+    <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
+      <div class="field">
+        <label for="title">Titulo *</label>
+        <input id="title" type="text" formControlName="title" placeholder="Titulo do risco" />
+        @if (isInvalid('title')) {
+        <small class="error-msg">Informe o titulo.</small>
+        }
+      </div>
+
+      <div class="field" style="grid-column: 1 / -1;">
+        <label for="description">Descricao</label>
+        <textarea id="description" rows="3" formControlName="description" placeholder="Descricao"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="probability">Probabilidade *</label>
+        <input id="probability" type="number" formControlName="probability" min="0" />
+        @if (isInvalid('probability')) {
+        <small class="error-msg">Informe a probabilidade.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="impact">Impacto *</label>
+        <input id="impact" type="number" formControlName="impact" min="0" />
+        @if (isInvalid('impact')) {
+        <small class="error-msg">Informe o impacto.</small>
+        }
+      </div>
+
+      <div class="field" style="grid-column: 1 / -1;">
+        <label for="mitigation">Mitigacao</label>
+        <textarea id="mitigation" rows="3" formControlName="mitigation" placeholder="Mitigacao proposta"></textarea>
+      </div>
+
+      <div class="field inline">
+        <label for="active">Status</label>
+        <label class="switch">
+          <input id="active" type="checkbox" formControlName="active" />
+          <span class="slider"></span>
+          <span class="switch-label">Ativo</span>
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="ghost-btn" [routerLink]="['/admin/riscos']">
+          Cancelar
+        </button>
+        <button type="submit" class="primary-btn">
+          <i class="pi pi-save"></i>
+          {{ riskId ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

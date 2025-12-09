@@ -1,0 +1,15 @@
+<nav class="breadcrumb">
+  <ol>
+    @for (crumb of crumbs; track crumb; let last = $last) {
+      <li [class.active]="last">
+        @if (crumb.icon) { <i [class]="crumb.icon"></i> }
+        @if (!last && crumb.link) {
+          <a [routerLink]="crumb.link">{{ crumb.label }}</a>
+        } @else {
+          <span>{{ crumb.label }}</span>
+        }
+        @if (!last) { <span class="divider">/</span> }
+      </li>
+    }
+  </ol>
+</nav>

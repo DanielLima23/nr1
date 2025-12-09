@@ -1,0 +1,56 @@
+﻿<app-top-page
+  [title]="planId ? 'Editar Plano de Acao' : 'Novo Plano de Acao'"
+  icon="pi pi-clipboard-check"
+  [showBack]="true"
+  [backLink]="actionsListLink">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="form-card">
+    <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
+      <div class="field">
+        <label for="title">Titulo *</label>
+        <input id="title" type="text" formControlName="title" placeholder="Digite o titulo do plano" />
+        @if (isInvalid('title')) {
+        <small class="error-msg">Informe o titulo.</small>
+        }
+      </div>
+
+      <div class="field" style="grid-column: 1 / -1;">
+        <label for="description">Descricao</label>
+        <textarea id="description" rows="3" formControlName="description" placeholder="Detalhe o plano"></textarea>
+      </div>
+
+      <div class="two-cols">
+        <div class="field">
+          <label for="responsible">Responsavel</label>
+          <input id="responsible" type="text" formControlName="responsible" placeholder="Nome do responsavel" />
+        </div>
+
+        <div class="field">
+          <label for="dueDate">Vencimento</label>
+          <input id="dueDate" type="date" formControlName="dueDate" />
+        </div>
+      </div>
+
+      <div class="field inline">
+        <label for="completed">Status</label>
+        <label class="switch">
+          <input id="completed" type="checkbox" formControlName="completed" />
+          <span class="slider"></span>
+          <span class="switch-label">Concluido</span>
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="ghost-btn" [routerLink]="actionsListLink">
+          Cancelar
+        </button>
+        <button type="submit" class="primary-btn">
+          <i class="pi pi-save"></i>
+          {{ planId ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

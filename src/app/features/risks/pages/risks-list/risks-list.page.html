@@ -1,0 +1,112 @@
+<app-top-page
+  title="Riscos"
+  icon="pi pi-exclamation-triangle"
+  [showAdd]="true"
+  addLabel="Novo"
+  [addLink]="'/admin/riscos/criar'">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="table-card">
+    <div class="table-header">
+      <div>
+        <p class="eyebrow">Registros</p>
+        <h3>Riscos</h3>
+        <p class="subtitle">Gerencie e acesse planos de ação rapidamente.</p>
+      </div>
+    </div>
+
+    @if (!loading()) {
+      <div class="table-scroll">
+        <p-table
+          [value]="(risks$ | async) ?? []"
+          class="accent-table"
+          [paginator]="false"
+          [rows]="10"
+          responsiveLayout="scroll"
+          [loading]="loading()">
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Título</th>
+              <th>Probabilidade</th>
+              <th>Impacto</th>
+              <th>Score</th>
+              <th>Ativo</th>
+              <th class="align-right">Ações</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td>{{ row.title }}</td>
+              <td>{{ row.probability }}</td>
+              <td>{{ row.impact }}</td>
+              <td>{{ row.score }}</td>
+              <td>
+                <span
+                  class="status-chip"
+                  [class.active]="row.active"
+                  [class.inactive]="!row.active">
+                  {{ row.active ? 'Sim' : 'Não' }}
+                </span>
+              </td>
+              <td class="action-col">
+                <button
+                  pButton
+                  icon="pi pi-clipboard"
+                  class="p-button-text action-btn"
+                  [routerLink]="['/admin/riscos', row.id, 'acoes']"
+                  pTooltip="Planos de ação" tooltipPosition="top" appendTo="body">
+                </button>
+                <button
+                  pButton
+                  icon="pi pi-pencil"
+                  class="p-button-text action-btn"
+                  [routerLink]="['/admin/riscos', 'editar', row.id]"
+                  pTooltip="Editar risco" tooltipPosition="top" appendTo="body">
+                </button>
+                <button
+                  pButton
+                  icon="pi pi-trash"
+                  class="p-button-text p-button-danger action-btn"
+                  (click)="openDeleteConfirm(row)"
+                  [disabled]="deletingId === row.id"
+                  pTooltip="Remover risco" tooltipPosition="top" appendTo="body">
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <div class="empty-state">
+              <i class="pi pi-exclamation-triangle"></i>
+              <p>Nenhum risco encontrado.</p>
+              <span>Cadastre um novo risco para monitorar.</span>
+            </div>
+          </ng-template>
+
+        </p-table>
+      </div>
+    } @else {
+      <div class="table-skeleton">
+        @for (_ of [1, 2, 3, 4, 5]; track _) {
+          <div class="skeleton-row"></div>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<app-confirm-modal
+  [visible]="showConfirmModal"
+  [title]="'Remover ' + (selectedTitle || 'risco') + '?'"
+  message="Esta ação é definitiva. Confirme para seguir."
+  confirmLabel="Remover"
+  cancelLabel="Cancelar"
+  icon="pi pi-trash"
+  [loading]="confirmLoading"
+  (confirm)="confirmDelete()"
+  (cancel)="closeDeleteConfirm()">
+</app-confirm-modal>
+

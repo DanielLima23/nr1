@@ -1,0 +1,10 @@
+@use 'list-page';
+
+.filters-inline {
+  display: flex;
+  align-items: center;
+}
+
+.action-btn {
+  font-weight: 700;
+}

@@ -1,0 +1,67 @@
+<app-top-page
+  title="Dashboard"
+  icon="pi pi-chart-bar"
+  [showBack]="false">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="cards-grid">
+    <div class="stat-card">
+      <p class="eyebrow">Empresas monitoradas</p>
+      <h2>{{ totalCount }}</h2>
+      <p class="muted">Total retornado pelo endpoint</p>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <div>
+        <p class="eyebrow">Visão geral</p>
+        <h3>Planos por empresa</h3>
+        <p class="subtitle">Progresso de planos de ação por empresa.</p>
+      </div>
+      <div class="header-actions">
+        <button pButton type="button" icon="pi pi-refresh" class="p-button-text" (click)="load()">
+          Recarregar
+        </button>
+      </div>
+    </div>
+
+    <div class="table-scroll" *ngIf="!loading()">
+      <p-table
+        [value]="companies"
+        [paginator]="false"
+        responsiveLayout="scroll"
+        [rows]="pageSize"
+        [tableStyle]="{ 'min-width': '640px' }">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Empresa</th>
+            <th class="align-right">Planos</th>
+            <th style="width: 260px;">Progresso</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>{{ row.name || '-' }}</td>
+            <td class="align-right">{{ progressLabel(row) }}</td>
+            <td>
+              <div class="progress-row">
+                <div class="progress-bar">
+                  <div class="progress-fill" [style.width.%]="row.progressPercent || 0"></div>
+                </div>
+                <span class="progress-value">{{ row.progressPercent || 0 }}%</span>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <div class="table-skeleton" *ngIf="loading()">
+      <div class="skeleton-row" *ngFor="let _ of [1, 2, 3, 4, 5]"></div>
+    </div>
+  </div>
+</section>

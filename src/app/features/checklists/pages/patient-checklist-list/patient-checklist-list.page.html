@@ -1,0 +1,79 @@
+<app-top-page
+  title="Checklists do Paciente"
+  icon="pi pi-clipboard"
+  [showAdd]="true"
+  addLabel="Novo"
+  [addLink]="createLink"
+  [addQueryParams]="{ companyId: companyId }"
+  [showBack]="true"
+  [backLink]="backLink"
+  [backQueryParams]="backQueryParams">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="table-card">
+    <div class="table-header">
+      <div>
+        <p class="eyebrow">Registros</p>
+        <h3>Checklists</h3>
+        <p class="subtitle">Histórico de checklists do paciente.</p>
+      </div>
+    </div>
+
+    @if (!loading()) {
+      <div class="table-scroll">
+        <p-table
+          [value]="(checklists$ | async) ?? []"
+          class="accent-table"
+          [paginator]="false"
+          [rows]="10"
+          responsiveLayout="scroll"
+          [loading]="loading()">
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Checklist</th>
+              <th>Realizado em</th>
+              <th>Criado em</th>
+              <th class="align-right">Ações</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td>{{ row.checklistName }}</td>
+              <td>{{ row.performedAt | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ row.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td class="action-col">
+                <button
+                  pButton
+                  icon="pi pi-eye"
+                  class="p-button-text action-btn"
+                  [routerLink]="['/admin/pacientes', patientId, 'checklists', row.id]"
+                  [queryParams]="{ companyId }"
+                  pTooltip="Visualizar respostas" tooltipPosition="top" appendTo="body">
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <div class="empty-state">
+              <i class="pi pi-clipboard"></i>
+              <p>Nenhum checklist encontrado.</p>
+              <span>Cadastre um checklist para este paciente.</span>
+            </div>
+          </ng-template>
+
+        </p-table>
+      </div>
+    } @else {
+      <div class="table-skeleton">
+        @for (_ of [1, 2, 3, 4, 5]; track _) {
+          <div class="skeleton-row"></div>
+        }
+      </div>
+    }
+  </div>
+</section>
+

@@ -1,0 +1,102 @@
+<div class="login-wrapper">
+
+  <!-- LADO ESQUERDO – LOGIN -->
+  <div class="login-left">
+    <div class="promo-box animate-promo">
+
+      <h2 class="promo-title">Sistema de Gestão NR-1</h2>
+
+      <p class="promo-subtitle">
+        Controle total de Análise de Risco e formulários.
+      </p>
+
+      <ul class="promo-list">
+        <li><i class="pi pi-check"></i> Cadastro de empresas</li>
+        <li><i class="pi pi-check"></i> Gestão completa de riscos ocupacionais</li>
+        <li><i class="pi pi-check"></i> Gestão de usuários</li>
+        <li><i class="pi pi-check"></i> Sistema 100% digital e seguro</li>
+        <!-- <li><i class="pi pi-check"></i> Painel pronto para auditorias</li> -->
+      </ul>
+
+      <div class="promo-footer">
+        <p>Traga sua empresa para o futuro da gestão NR-1.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LADO DIREITO – MERCHAN NR-1 -->
+  <div class="login-right">
+    <form [formGroup]="form" (ngSubmit)="submit()" class="login-card">
+
+      <header class="login-card-header">
+        <div class="logo-circle">
+          <span>N1</span>
+        </div>
+        <div class="header-text">
+          <h1>Entrar</h1>
+          <p>Acesse o painel de gestão NR-1</p>
+        </div>
+      </header>
+
+      <!-- Campo de e-mail -->
+      <label class="field">
+        <span>E-mail</span>
+
+        <input type="email" formControlName="username" autocomplete="email"
+          [class.input-invalid]="username.invalid && username.touched" placeholder="seuemail@exemplo.com" />
+
+        @if (username.invalid && username.touched) {
+        <p class="error">Digite um e-mail válido.</p>
+        }
+      </label>
+
+      <!-- Campo de senha -->
+      <label class="field">
+        <span>Senha</span>
+
+        <div class="password-wrapper">
+          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" autocomplete="current-password"
+            [class.input-invalid]="password.invalid && password.touched" placeholder="Sua senha" />
+
+          <button type="button" class="password-toggle" (click)="togglePassword()">
+            <i class="pi" [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"></i>
+          </button>
+        </div>
+
+        @if (password.invalid && password.touched) {
+        <p class="error">Digite sua senha.</p>
+        }
+      </label>
+
+      <button type="submit" class="primary-button">
+        Entrar
+      </button>
+
+      @if (isMockEnabled) {
+      <button type="button" class="dev-button" (click)="loginAsDev()">
+        Entrar em modo desenvolvimento
+      </button>
+
+      <p class="dev-hint">
+        Modo desenvolvimento ativo. Nenhuma requisição real será feita.
+      </p>
+      }
+    </form>
+
+  </div>
+
+</div>
+
+@if (showWelcome) {
+  <div class="welcome-overlay">
+    <div class="welcome-card">
+      <div class="glow"></div>
+      <i class="pi pi-check-circle"></i>
+      <h3>Bem-vindo(a)!</h3>
+      <p>Carregando seu painel...</p>
+    </div>
+  </div>
+}
+
+<p-toast position="top-right"></p-toast>

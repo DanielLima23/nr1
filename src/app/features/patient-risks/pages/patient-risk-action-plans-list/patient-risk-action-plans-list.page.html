@@ -1,0 +1,110 @@
+<app-top-page
+  [title]="riskTitle ? 'Planos de ação - ' + riskTitle : 'Planos de ação'"
+  icon="pi pi-clipboard"
+  [showAdd]="true"
+  addLabel="Novo"
+  [addLink]="createLink"
+  [addQueryParams]="{ companyId: companyId }"
+  [showBack]="true"
+  [backLink]="backLink"
+  [backQueryParams]="backQueryParams">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="table-card">
+    <div class="table-header">
+      <div>
+        <p class="eyebrow">Registros</p>
+        <h3>Planos</h3>
+        <p class="subtitle">Planos de ação vinculados a este risco.</p>
+      </div>
+    </div>
+
+    @if (!loading()) {
+      <div class="table-scroll">
+        <p-table
+          [value]="plans"
+          class="accent-table"
+          [paginator]="false"
+          responsiveLayout="scroll"
+          [rows]="10"
+          [loading]="loading()">
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Título</th>
+              <th>Responsável</th>
+              <th>Vencimento</th>
+              <th>Status</th>
+              <th class="align-right">Ações</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td>{{ row.title || '-' }}</td>
+              <td>{{ row.responsible || '-' }}</td>
+              <td>{{ row.dueDate | date:'shortDate' }}</td>
+              <td>
+                <span
+                  class="status-chip"
+                  [class.active]="row.completed"
+                  [class.inactive]="!row.completed">
+                  {{ row.completed ? 'Concluído' : 'Pendente' }}
+                </span>
+              </td>
+              <td class="action-col">
+                <button
+                  pButton
+                  icon="pi pi-pencil"
+                  class="p-button-text action-btn"
+                  [routerLink]="['/admin/pacientes', patientId, 'riscos', riskId, 'planos', 'editar', row.id]"
+                  [queryParams]="{ companyId: companyId }"
+                  pTooltip="Editar plano"
+                  tooltipPosition="top"
+                  appendTo="body">
+                </button>
+                <button
+                  pButton
+                  icon="pi pi-trash"
+                  class="p-button-text p-button-danger action-btn"
+                  (click)="openDeleteConfirm(row)"
+                  [disabled]="deletingId === row.id"
+                  pTooltip="Remover plano"
+                  tooltipPosition="top"
+                  appendTo="body">
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <div class="empty-state">
+              <i class="pi pi-clipboard"></i>
+              <p>Nenhum plano encontrado.</p>
+              <span>Cadastre um plano de ação.</span>
+            </div>
+          </ng-template>
+        </p-table>
+      </div>
+    } @else {
+      <div class="table-skeleton">
+        @for (_ of [1, 2, 3, 4, 5]; track _) {
+          <div class="skeleton-row"></div>
+        }
+      </div>
+    }
+  </div>
+
+  <app-confirm-modal
+    [visible]="showConfirmModal"
+    [title]="'Remover plano?'"
+    message="Esta ação é definitiva. Confirme para prosseguir."
+    confirmLabel="Remover"
+    cancelLabel="Cancelar"
+    icon="pi pi-trash"
+    [loading]="confirmLoading"
+    (confirm)="confirmDelete()"
+    (cancel)="closeDeleteConfirm()">
+  </app-confirm-modal>
+</section>

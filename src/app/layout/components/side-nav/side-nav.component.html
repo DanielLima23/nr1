@@ -1,0 +1,91 @@
+<!-- side-nav.component.html -->
+<nav class="sidenav">
+
+  <div class="sidenav-header">
+    <span class="title">App Base</span>
+  </div>
+
+  <ul class="sidenav-list">
+    @for (item of items; track item.label) {
+      <li
+        class="sidenav-item"
+        [class.is-active]="isItemActive(item)"
+        [class.is-expanded]="isExpanded(item)"
+      >
+
+        <!-- Item que é grupo (tem filhos) -->
+        @if (item.children?.length) {
+          <button
+            type="button"
+            class="sidenav-link sidenav-link-group"
+            (click)="onGroupClick(item)"
+            [attr.aria-expanded]="isExpanded(item)"
+            aria-haspopup="true"
+          >
+            @if (item.icon) {
+              <i class="pi {{ item.icon }} icon"></i>
+            }
+
+            <span class="label">{{ item.label }}</span>
+
+            <i
+              class="pi toggle-icon"
+              [ngClass]="isExpanded(item) ? 'pi-chevron-up' : 'pi-chevron-down'"
+            ></i>
+          </button>
+
+          <ul class="sidenav-sublist">
+            @for (child of item.children; track child.label) {
+              <li
+                class="sidenav-subitem"
+                [class.is-active]="isItemActive(child)"
+              >
+                <a
+                  class="sidenav-link sidenav-link-child"
+                  [routerLink]="child.route"
+                >
+                  @if (child.icon) {
+                    <i class="pi {{ child.icon }} icon"></i>
+                  }
+
+                  <span class="label">{{ child.label }}</span>
+                </a>
+              </li>
+            }
+          </ul>
+        }
+
+        <!-- Item simples (sem filhos) -->
+        @if (!item.children?.length) {
+          <a class="sidenav-link" [routerLink]="item.route">
+            @if (item.icon) {
+              <i class="pi {{ item.icon }} icon"></i>
+            }
+
+            <span class="label">{{ item.label }}</span>
+          </a>
+        }
+      </li>
+    }
+  </ul>
+
+  <div class="sidenav-footer">
+    <button class="logout-btn" (click)="logout()">
+      <i class="pi pi-sign-out"></i>
+      <span>Sair</span>
+    </button>
+  </div>
+
+</nav>
+
+<app-confirm-modal
+  [visible]="showLogoutConfirm"
+  title="Sair do sistema?"
+  message="Confirme para encerrar a sessão."
+  confirmLabel="Sair"
+  cancelLabel="Cancelar"
+  icon="pi pi-sign-out"
+  [confirmIcon]="null"
+  (confirm)="confirmLogout()"
+  (cancel)="cancelLogout()">
+</app-confirm-modal>

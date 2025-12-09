@@ -1,0 +1,100 @@
+<app-top-page
+  title="Setores"
+  icon="pi pi-sitemap"
+  [showAdd]="true"
+  addLabel="Nova"
+  [addLink]="['/admin/empresa', companyId, 'setores', 'criar']"
+  [showBack]="true"
+  [backLink]="['/admin/empresa']">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="table-card">
+    <div class="table-header">
+      <div>
+        <p class="eyebrow">Registros</p>
+        <h3>Setores</h3>
+        <p class="subtitle">Organize e navegue para as funções de cada setor.</p>
+      </div>
+    </div>
+
+    @if (!loading()) {
+      <div class="table-scroll">
+        <p-table
+          [value]="sectors"
+          class="accent-table"
+          [paginator]="false"
+          [rows]="10"
+          responsiveLayout="scroll"
+          [loading]="loading()">
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Nome</th>
+              <th>Descrição</th>
+              <th class="align-right">Ações</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td>{{ row.name }}</td>
+              <td>{{ row.description }}</td>
+              <td class="action-col">
+                <button
+                  pButton
+                  icon="pi pi-briefcase"
+                  class="p-button-text action-btn"
+                  [routerLink]="['/admin/empresa', companyId, 'setores', row.id, 'funcoes']">
+                </button>
+                <button
+                  pButton
+                  icon="pi pi-pencil"
+                  class="p-button-text action-btn"
+                  [routerLink]="['/admin/empresa', companyId, 'setores', 'editar', row.id]">
+                </button>
+                <button
+                  pButton
+                  icon="pi pi-trash"
+                  class="p-button-text p-button-danger action-btn"
+                  (click)="openDeleteConfirm(row)"
+                  [disabled]="deletingId === row.id"
+                  pTooltip="Remover setor" tooltipPosition="top" appendTo="body">
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <div class="empty-state">
+              <i class="pi pi-sitemap"></i>
+              <p>Nenhum setor cadastrado.</p>
+              <span>Adicione um setor para começar.</span>
+            </div>
+          </ng-template>
+
+        </p-table>
+      </div>
+    } @else {
+      <div class="table-skeleton">
+        @for (_ of [1, 2, 3, 4, 5]; track _) {
+          <div class="skeleton-row"></div>
+        }
+      </div>
+    }
+  </div>
+
+  <app-confirm-modal
+    [visible]="showConfirmModal"
+    [title]="'Remover ' + (selectedName || 'setor') + '?'"
+    message="Esta ação é definitiva. Confirme para prosseguir."
+    confirmLabel="Remover"
+    cancelLabel="Cancelar"
+    icon="pi pi-trash"
+    [loading]="deletingId === selectedId"
+    (confirm)="confirmDelete()"
+    (cancel)="closeDeleteConfirm()">
+  </app-confirm-modal>
+</section>
+
+

@@ -1,0 +1,35 @@
+﻿<app-top-page
+  [title]="checklistId ? 'Editar Checklist' : 'Novo Checklist'"
+  icon="pi pi-clipboard"
+  [showBack]="true"
+  [backLink]="'/admin/checklists'">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="form-card">
+    <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
+      <div class="field">
+        <label for="name">Nome *</label>
+        <input id="name" type="text" formControlName="name" placeholder="Nome do checklist" />
+        @if (isInvalid('name')) {
+        <small class="error-msg">Informe o nome do checklist.</small>
+        }
+      </div>
+
+      <div class="field" style="grid-column: 1 / -1;">
+        <label for="description">Descricao</label>
+        <textarea id="description" rows="3" formControlName="description" placeholder="Descricao"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="ghost-btn" [routerLink]="['/admin/checklists']">
+          Cancelar
+        </button>
+        <button type="submit" class="primary-btn">
+          <i class="pi pi-save"></i>
+          {{ checklistId ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

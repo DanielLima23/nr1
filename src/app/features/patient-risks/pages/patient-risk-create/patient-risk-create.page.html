@@ -1,0 +1,40 @@
+<app-top-page
+  [title]="riskIdParam ? 'Editar risco do paciente' : 'Novo risco do paciente'"
+  icon="pi pi-exclamation-triangle"
+  [showBack]="true"
+  [backLink]="['/admin/pacientes', patientId, 'riscos']"
+  [backQueryParams]="companyId ? { companyId: companyId } : null">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="form-card">
+    <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
+      <div class="field">
+        <label>Risco *</label>
+        <p-dropdown
+          [options]="risksOptions"
+          formControlName="riskId"
+          placeholder="Selecione o risco">
+        </p-dropdown>
+        @if (isInvalid('riskId')) {
+        <small class="error-msg">Selecione o risco.</small>
+        }
+      </div>
+
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Observações</label>
+        <textarea rows="3" formControlName="notes" placeholder="Observações"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="ghost-btn" [routerLink]="['/admin/pacientes', patientId, 'riscos']">
+          Cancelar
+        </button>
+        <button type="submit" class="primary-btn">
+          <i class="pi pi-save"></i>
+          {{ riskIdParam ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

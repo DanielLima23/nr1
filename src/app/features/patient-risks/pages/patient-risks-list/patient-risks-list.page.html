@@ -1,0 +1,110 @@
+<app-top-page
+  title="Riscos do paciente"
+  icon="pi pi-exclamation-triangle"
+  [showAdd]="true"
+  addLabel="Novo"
+  [addLink]="createLink"
+  [addQueryParams]="{ companyId: companyId }"
+  [showBack]="true"
+  [backLink]="backLink"
+  [backQueryParams]="backQueryParams">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="table-card">
+    <div class="table-header">
+      <div>
+        <p class="eyebrow">Registros</p>
+        <h3>Riscos</h3>
+        <p class="subtitle">Gerencie riscos associados ao paciente.</p>
+      </div>
+    </div>
+
+    @if (!loading()) {
+      <div class="table-scroll">
+        <p-table
+          [value]="risks"
+          class="accent-table"
+          [paginator]="false"
+          responsiveLayout="scroll"
+          [rows]="10"
+          [loading]="loading()">
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Risco</th>
+              <th>Obs.</th>
+              <th class="align-right">Ações</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td>{{ row.riskTitle || '-' }}</td>
+              <td>{{ row.notes || '-' }}</td>
+              <td class="action-col">
+                <button
+                  pButton
+                  icon="pi pi-list"
+                  class="p-button-text action-btn"
+                  [routerLink]="['/admin/pacientes', patientId, 'riscos', row.id, 'planos']"
+                  [queryParams]="{ companyId: companyId }"
+                  pTooltip="Planos de ação"
+                  tooltipPosition="top"
+                  appendTo="body">
+                </button>
+                <button
+                  pButton
+                  icon="pi pi-pencil"
+                  class="p-button-text action-btn"
+                  [routerLink]="['/admin/pacientes', patientId, 'riscos', 'editar', row.id]"
+                  [queryParams]="{ companyId: companyId }"
+                  pTooltip="Editar risco"
+                  tooltipPosition="top"
+                  appendTo="body">
+                </button>
+                <button
+                  pButton
+                  icon="pi pi-trash"
+                  class="p-button-text p-button-danger action-btn"
+                  (click)="openDeleteConfirm(row)"
+                  [disabled]="deletingId === row.id"
+                  pTooltip="Remover risco"
+                  tooltipPosition="top"
+                  appendTo="body">
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <div class="empty-state">
+              <i class="pi pi-exclamation-triangle"></i>
+              <p>Nenhum risco encontrado.</p>
+              <span>Cadastre um risco para este paciente.</span>
+            </div>
+          </ng-template>
+        </p-table>
+      </div>
+    } @else {
+      <div class="table-skeleton">
+        @for (_ of [1, 2, 3, 4, 5]; track _) {
+          <div class="skeleton-row"></div>
+        }
+      </div>
+    }
+  </div>
+
+  <app-confirm-modal
+    [visible]="showConfirmModal"
+    [title]="'Remover ' + (selectedName || 'risco') + '?'"
+    message="Esta ação é definitiva. Confirme para prosseguir."
+    confirmLabel="Remover"
+    cancelLabel="Cancelar"
+    icon="pi pi-trash"
+    [loading]="confirmLoading"
+    (confirm)="confirmDelete()"
+    (cancel)="closeDeleteConfirm()">
+  </app-confirm-modal>
+</section>
+

@@ -1,0 +1,132 @@
+<app-top-page
+  title="Usuários"
+  icon="pi pi-users"
+  [showAdd]="true"
+  addLabel="Novo"
+  [addLink]="'/admin/usuarios/criar'">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="table-card">
+    <div class="table-header">
+      <div>
+        <p class="eyebrow">Registros</p>
+        <h3>Usuários</h3>
+        <p class="subtitle">Gestão de perfis e status.</p>
+      </div>
+    </div>
+
+    @if (!loading()) {
+      <div class="table-scroll">
+        <p-table
+          [value]="(users$ | async) ?? []"
+          class="accent-table"
+          [paginator]="false"
+          responsiveLayout="scroll">
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Usuário</th>
+              <th>Perfil</th>
+              <th>Ativo</th>
+              <th class="align-right">Ações</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-row>
+            <tr [class.row-deleting]="deletingId === row.id">
+              <td>
+                <div class="user-cell">
+                  <span class="avatar">{{ row.name?.slice(0, 2)?.toUpperCase() }}</span>
+                  <div class="user-meta">
+                    <span class="name">{{ row.name }}</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="profile-chip">{{ profilesMap[row.profile] }}</span>
+              </td>
+
+              <td>
+                <span
+                  class="status-chip"
+                  [class.active]="row.active"
+                  [class.inactive]="!row.active">
+                  <i class="pi" [class.pi-check-circle]="row.active" [class.pi-ban]="!row.active"></i>
+                  {{ row.active ? 'Sim' : 'Não' }}
+                </span>
+              </td>
+
+              <td class="action-col align-right">
+                <button
+                  pButton
+                  icon="pi pi-pencil"
+                  class="p-button-text action-btn"
+                  [routerLink]="['/admin/usuarios/editar', row.id]"
+                  pTooltip="Editar usuário" tooltipPosition="top" appendTo="body">
+                </button>
+                <button
+                  pButton
+                  icon="pi pi-trash"
+                  class="p-button-text p-button-danger action-btn"
+                  (click)="openDeleteConfirm(row)"
+                  [disabled]="deletingId === row.id"
+                  pTooltip="Remover usuário" tooltipPosition="top" appendTo="body">
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <div class="empty-state">
+              <i class="pi pi-users"></i>
+              <p>Nenhum usuário encontrado.</p>
+              <span>Adicione um novo cadastro para começar.</span>
+            </div>
+          </ng-template>
+
+        </p-table>
+      </div>
+    } @else {
+      <div class="table-skeleton">
+        @for (_ of [1, 2, 3, 4, 5]; track _) {
+          <div class="skeleton-row"></div>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+@if (showConfirmModal) {
+  <div class="confirm-overlay" (click)="closeDeleteConfirm()">
+    <div class="confirm-dialog" (click)="$event.stopPropagation()">
+      <div class="dialog-icon">
+        <i class="pi pi-exclamation-triangle"></i>
+      </div>
+      <div class="dialog-body">
+        <p class="eyebrow">Confirmação</p>
+        <h3>Remover {{ selectedUserName || 'usuário' }}?</h3>
+        <p class="subtitle">
+          Esta ação é definitiva. Confirme para seguir com a exclusão.
+        </p>
+      </div>
+      <div class="dialog-actions">
+        <button pButton class="p-button-text" type="button" (click)="closeDeleteConfirm()">
+          Cancelar
+        </button>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-trash"
+          class="p-button-danger"
+          (click)="confirmDelete()"
+          [disabled]="deletingId === selectedUserId">
+          Remover
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+

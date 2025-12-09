@@ -1,0 +1,112 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.35);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  z-index: 9999;
+}
+
+.spinner-shell {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: grid;
+  place-items: center;
+  filter: drop-shadow(0 8px 18px rgba(15, 23, 42, 0.15));
+}
+
+.ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  border: 2px solid rgba(59, 130, 246, 0.25);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+.orb {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  opacity: 0.9;
+  animation: orbit 1.3s linear infinite;
+}
+
+.orb-1 {
+  background: radial-gradient(circle, #0ea5e9, #2563eb);
+  animation-delay: 0s;
+}
+.orb-2 {
+  background: radial-gradient(circle, #22c55e, #16a34a);
+  animation-delay: 0.2s;
+}
+.orb-3 {
+  background: radial-gradient(circle, #f97316, #ea580c);
+  animation-delay: 0.4s;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #0f172a;
+  animation: scaleDot 0.9s ease-in-out infinite;
+}
+
+.label {
+  position: absolute;
+  bottom: -26px;
+  color: #0f172a;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-size: 0.85rem;
+  animation: fadeText 1.6s ease-in-out infinite;
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg) translateX(26px) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(26px) rotate(-360deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+}
+
+@keyframes scaleDot {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeText {
+  0%, 100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}

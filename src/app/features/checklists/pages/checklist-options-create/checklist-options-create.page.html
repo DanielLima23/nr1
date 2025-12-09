@@ -1,0 +1,47 @@
+﻿<app-top-page
+  [title]="optionId ? 'Editar Opcao' : 'Nova Opcao'"
+  icon="pi pi-list"
+  [showBack]="true"
+  [backLink]="['/admin/checklists', checklistId, 'itens', itemId, 'opcoes']">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="form-card">
+    <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
+      <div class="field">
+        <label for="label">Rotulo *</label>
+        <input id="label" type="text" formControlName="label" placeholder="Digite o rotulo" />
+        @if (isInvalid('label')) {
+        <small class="error-msg">Informe o rotulo.</small>
+        }
+      </div>
+
+      <div class="field inline">
+        <label for="requireExplanation">Requer explicacao</label>
+        <label class="switch">
+          <input id="requireExplanation" type="checkbox" formControlName="requireExplanation" />
+          <span class="slider"></span>
+          <span class="switch-label">Sim</span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label for="order">Ordem *</label>
+        <input id="order" type="number" formControlName="order" min="0" />
+        @if (isInvalid('order')) {
+        <small class="error-msg">Informe a ordem (0 ou maior).</small>
+        }
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="ghost-btn" [routerLink]="['/admin/checklists', checklistId, 'itens', itemId, 'opcoes']">
+          Cancelar
+        </button>
+        <button type="submit" class="primary-btn">
+          <i class="pi pi-save"></i>
+          {{ optionId ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,79 @@
+﻿<app-top-page
+  [title]="userId ? 'Editar usuario' : 'Novo usuario'"
+  icon="pi pi-user-edit"
+  [showBack]="true">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="form-card">
+
+    <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
+      <div class="field">
+        <label for="name">Nome *</label>
+        <input id="name" formControlName="name" placeholder="Digite o nome completo" />
+        @if (isInvalid('name')) {
+        <small class="error-msg">Informe o nome.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="username">Username *</label>
+        <input id="username" formControlName="username" placeholder="usuario.sistema" />
+        @if (isInvalid('username')) {
+        <small class="error-msg">Informe o username.</small>
+        }
+      </div>
+
+      @if (!userId) {
+        <div class="field">
+          <label for="password">Senha *</label>
+          <input id="password" type="password" formControlName="password" placeholder="Defina uma senha" />
+          @if (isInvalid('password')) {
+          <small class="error-msg">Informe a senha.</small>
+          }
+        </div>
+      }
+
+      @if (userId) {
+        <div class="field">
+          <label for="newPassword">Nova senha</label>
+          <input id="newPassword" type="password" formControlName="newPassword" placeholder="Atualize a senha (opcional)" />
+        </div>
+      }
+
+      <div class="field">
+        <label for="profile">Perfil *</label>
+        <p-dropdown
+          [options]="profiles"
+          formControlName="profile"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Selecione um perfil">
+        </p-dropdown>
+        @if (isInvalid('profile')) {
+        <small class="error-msg">Selecione o perfil.</small>
+        }
+      </div>
+
+      <div class="field inline">
+        <label for="active">Status</label>
+        <label class="switch">
+          <input id="active" type="checkbox" formControlName="active" />
+          <span class="slider"></span>
+          <span class="switch-label">Ativo</span>
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="ghost-btn" (click)="navigate('/admin/usuarios')">
+          Cancelar
+        </button>
+        <button type="submit" class="primary-btn">
+          <i class="pi pi-save"></i>
+          {{ userId ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</section>

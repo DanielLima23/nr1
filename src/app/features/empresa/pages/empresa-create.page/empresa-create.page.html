@@ -1,0 +1,73 @@
+<app-top-page
+  title="Empresas"
+  icon="pi pi-briefcase"
+  [showBack]="true"
+  [backLink]="'/admin/empresa'">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="form-card">
+    <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
+      <div class="field">
+        <label>Nome *</label>
+        <input type="text" formControlName="name" required />
+        @if (isInvalid('name')) {
+        <small class="error-msg">Informe o nome.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label>Responsavel *</label>
+        <input type="text" formControlName="responsibleName" required />
+        @if (isInvalid('responsibleName')) {
+        <small class="error-msg">Informe o responsavel.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label>Email *</label>
+        <input type="email" formControlName="responsibleEmail" required />
+        @if (isInvalid('responsibleEmail')) {
+        <small class="error-msg">Informe um email valido.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label>Telefone *</label>
+        <input
+          type="text"
+          formControlName="phone"
+          required
+          (input)="onPhoneInput($event)" />
+        @if (isInvalid('phone')) {
+        <small class="error-msg">Informe o telefone.</small>
+        }
+      </div>
+
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Endereco *</label>
+        <input type="text" formControlName="address" required />
+        @if (isInvalid('address')) {
+        <small class="error-msg">Informe o endereco.</small>
+        }
+      </div>
+
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Observacao</label>
+        <textarea formControlName="observations" rows="3"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="ghost-btn" (click)="navigate('/admin/empresa')">
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="primary-btn">
+          <i class="pi pi-save"></i>
+          {{ companyId ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

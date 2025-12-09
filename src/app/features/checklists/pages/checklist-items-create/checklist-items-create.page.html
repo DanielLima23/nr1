@@ -1,0 +1,38 @@
+﻿<app-top-page
+  [title]="itemId ? 'Editar Item' : 'Novo Item'"
+  icon="pi pi-list"
+  [showBack]="true"
+  [backLink]="['/admin/checklists', checklistId, 'itens']">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="form-card">
+    <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
+      <div class="field">
+        <label for="question">Pergunta *</label>
+        <input id="question" type="text" formControlName="question" placeholder="Digite a pergunta" />
+        @if (isInvalid('question')) {
+        <small class="error-msg">Informe a pergunta.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="order">Ordem *</label>
+        <input id="order" type="number" formControlName="order" min="0" />
+        @if (isInvalid('order')) {
+        <small class="error-msg">Informe a ordem (0 ou maior).</small>
+        }
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="ghost-btn" [routerLink]="['/admin/checklists', checklistId, 'itens']">
+          Cancelar
+        </button>
+        <button type="submit" class="primary-btn">
+          <i class="pi pi-save"></i>
+          {{ itemId ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

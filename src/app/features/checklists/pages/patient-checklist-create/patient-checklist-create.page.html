@@ -1,0 +1,262 @@
+<app-top-page
+  title="Novo Checklist"
+  icon="pi pi-clipboard"
+  [showBack]="true"
+  [backLink]="['/admin/pacientes', patientId, 'checklists']"
+  [backQueryParams]="companyId ? { companyId: companyId } : null">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="form-layout">
+    <div class="form-card">
+      <div class="form-header">
+        <div>
+          <p class="eyebrow">Checklist do paciente</p>
+          <h3>Aplicar checklist</h3>
+          <p class="subtitle">Selecione o checklist, informe data/hora e responda as perguntas.</p>
+        </div>
+        <div class="meta-hint">
+          <i class="pi pi-info-circle"></i>
+          <div>
+            <p class="hint-title">Campos com * sao obrigatorios.</p>
+            <span class="hint-sub">Os avisos mostram exatamente o que falta preencher.</span>
+          </div>
+        </div>
+      </div>
+
+      <form [formGroup]="form" class="form-grid form-shell" (ngSubmit)="submit()">
+        <div class="field">
+          <label for="checklist">Checklist *</label>
+          <p-dropdown
+            id="checklist"
+            [options]="checklists"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="Selecione um checklist"
+            formControlName="checklistId"
+            (onChange)="onChecklistChange($event.value)">
+          </p-dropdown>
+          @if (isInvalid('checklistId')) {
+          <small class="error-msg">Selecione um checklist.</small>
+          }
+        </div>
+
+        <div class="field date-row">
+          <label for="performedAt">Realizado em *</label>
+          <div class="date-actions">
+            <input id="performedAt" type="datetime-local" formControlName="performedAt" />
+            <button type="submit" class="primary-btn inline-save">
+              <i class="pi pi-save"></i>
+              Salvar
+            </button>
+          </div>
+          @if (isInvalid('performedAt')) {
+          <small class="error-msg">Informe a data e hora.</small>
+          }
+        </div>
+
+        <div class="divider"></div>
+
+        @if (items.length) {
+          <div class="questions" formArrayName="answers">
+            @for (item of items; track item.id; let idx = $index) {
+              <div class="question-card" [formGroup]="answerGroup(idx)">
+                <div class="question-title">
+                  <span class="order">#{{ item.order ?? (idx + 1) }}</span>
+                  <div class="question-copy">
+                    <p class="question-label">{{ item.question }}</p>
+                    @if (item.options?.length) {
+                      <small class="question-hint">Selecione uma opcao para seguir.</small>
+                    }
+                  </div>
+                </div>
+
+                <div class="options">
+                  @for (opt of item.options; track opt.id) {
+                    <label
+                      class="option-row"
+                      [class.selected]="answerGroup(idx).get('checklistOptionId')?.value === opt.id">
+                      <input
+                        type="radio"
+                        [value]="opt.id"
+                        formControlName="checklistOptionId"
+                        (change)="onOptionChange(idx, opt)" />
+                      <div class="option-content">
+                        <span class="option-label">{{ opt.label }}</span>
+                        @if (opt.requireExplanation) {
+                          <span class="pill">Requer explicacao</span>
+                        }
+                      </div>
+                    </label>
+                  }
+
+                  @if (isAnswerInvalid(idx, 'checklistOptionId')) {
+                  <small class="error-msg">Selecione uma opcao.</small>
+                  }
+
+                  @if (item.options?.length && requiresExplanation(idx)) {
+                    <div class="explanation">
+                      <label>
+                        Comentarios
+                        @if (requiresExplanation(idx)) { <span class="required">*</span> }
+                      </label>
+                      <textarea
+                        rows="2"
+                        placeholder="Descreva detalhes ou justificativas"
+                        formControlName="explanation">
+                      </textarea>
+                      <small class="helper">Obrigatorio quando a opcao marcada exigir justificativa.</small>
+                      @if (isExplanationInvalid(idx)) {
+                      <small class="error-msg">Informe a justificativa.</small>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="empty-questions">
+            <i class="pi pi-list-check"></i>
+            <div>
+              <p>Selecione um checklist para carregar as perguntas.</p>
+              <span>As questoes aparecerao aqui para voce responder.</span>
+            </div>
+          </div>
+        }
+      </form>
+    </div>
+
+    <aside class="side-panel">
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Riscos do paciente</p>
+            <h4>Controle de riscos</h4>
+            <p class="subtitle">Associe riscos e planos enquanto preenche o checklist.</p>
+          </div>
+        </div>
+
+        <div class="panel-section add-risk-block">
+          <p class="section-title">Adicionar risco</p>
+          <form class="panel-form" [formGroup]="riskForm" (ngSubmit)="submitRisk()">
+            <p-dropdown
+              [options]="riskOptions"
+              formControlName="riskId"
+              placeholder="Selecione um risco">
+            </p-dropdown>
+            @if (isRiskInvalid('riskId')) {
+            <small class="error-msg">Selecione um risco.</small>
+            }
+            <button type="submit" class="primary-btn full-width">Adicionar risco</button>
+          </form>
+        </div>
+
+        <div class="panel-section">
+          <div class="section-header">
+            <p class="section-title">Riscos adicionados</p>
+            <small class="muted">{{ patientRisks.length }} item(ns)</small>
+          </div>
+          @if (patientRisks.length) {
+            <div class="risk-cards">
+              @for (risk of patientRisks; track risk.tempId) {
+                <div class="risk-card">
+                  <div class="risk-main">
+                    <div>
+                      <p class="risk-name">{{ risk.riskTitle || 'Risco' }}</p>
+                      @if (risk.notes) {
+                      <small class="risk-notes">{{ risk.notes }}</small>
+                      } @else {
+                      <small class="risk-notes muted">Sem observacoes</small>
+                      }
+                    </div>
+                    <div class="risk-actions">
+                      <span class="badge">{{ risk.plans.length }} plano(s)</span>
+                      <button type="button" class="ghost-btn danger small" (click)="removeRisk(risk)">
+                        <i class="pi pi-trash"></i>
+                        Remover risco
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="plans-list compact">
+                    @if (risk.plans.length) {
+                      @for (plan of risk.plans; track plan.tempId) {
+                        <div class="plan-row">
+                          <div class="plan-main">
+                            <p class="plan-title">{{ plan.title }}</p>
+                            <span
+                              class="status-chip"
+                              [class.pending]="!plan.existingId"
+                              [class.done]="!!plan.existingId && plan.completed">
+                              {{ plan.existingId ? (plan.completed ? 'Concluido' : 'Pendente') : 'Pendente' }}
+                            </span>
+                          </div>
+                          <small class="plan-meta">
+                            <span>{{ plan.responsible || 'Sem responsavel' }}</span>
+                            @if (plan.dueDate) {
+                              <span> · Venc: {{ plan.dueDate | date:'dd/MM/yyyy' }}</span>
+                            }
+                          </small>
+                          @if (plan.description) {
+                          <p class="plan-desc">{{ plan.description }}</p>
+                          }
+                          @if (!plan.existingId) {
+                            <div class="plan-actions-inline">
+                              <button type="button" class="ghost-btn danger" (click)="removePlan(risk, plan)">
+                                <i class="pi pi-trash"></i>
+                                Remover
+                              </button>
+                            </div>
+                          }
+                        </div>
+                      }
+                    } @else {
+                      <div class="empty-panel">
+                        <i class="pi pi-list-check"></i>
+                        <span>Nenhum plano adicionado.</span>
+                      </div>
+                    }
+                    </div>
+
+                  <div class="plan-actions">
+                    @if (planFormVisible[risk.tempId]) {
+                      <form class="panel-form plan-form" [formGroup]="planDrafts[risk.tempId]" (ngSubmit)="addPlan(risk)">
+                        <p class="section-title">Novo plano</p>
+                        <input type="text" formControlName="title" placeholder="Titulo do plano" />
+                        @if (isPlanInvalid('title', risk.tempId)) {
+                        <small class="error-msg">Informe o titulo.</small>
+                        }
+                        <textarea rows="2" formControlName="description" placeholder="Descricao (opcional)"></textarea>
+                        <input type="text" formControlName="responsible" placeholder="Responsavel (opcional)" />
+                        <input type="date" formControlName="dueDate" />
+
+                        <div class="plan-buttons">
+                          <button type="button" class="ghost-btn" (click)="togglePlanForm(risk.tempId)">Cancelar</button>
+                          <button type="submit" class="primary-btn">
+                            <i class="pi pi-plus"></i>
+                            Salvar plano
+                          </button>
+                        </div>
+                      </form>
+                    } @else {
+                      <button type="button" class="secondary-btn full-width plan-toggle" (click)="togglePlanForm(risk.tempId)">
+                        <i class="pi pi-plus"></i>
+                        Adicionar plano de acao
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="empty-panel">
+              <i class="pi pi-exclamation-triangle"></i>
+              <span>Nenhum risco adicionado.</span>
+            </div>
+          }
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>

@@ -1,0 +1,101 @@
+<app-top-page
+  title="Itens do Checklist"
+  icon="pi pi-list"
+  [showAdd]="true"
+  addLabel="Novo"
+  [addLink]="createLink"
+  [showBack]="true"
+  [backLink]="backLink">
+</app-top-page>
+
+<section class="page-shell">
+  <div class="table-card">
+    <div class="table-header">
+      <div>
+        <p class="eyebrow">Registros</p>
+        <h3>Itens</h3>
+        <p class="subtitle">Gerencie perguntas e opções do checklist.</p>
+      </div>
+    </div>
+
+    @if (!loading()) {
+      <div class="table-scroll">
+        <p-table
+          [value]="items"
+          class="accent-table"
+          [paginator]="false"
+          [rows]="10"
+          responsiveLayout="scroll"
+          [loading]="loading()">
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Ordem</th>
+              <th>Pergunta</th>
+              <th class="align-right">Ações</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td>{{ row.order }}</td>
+              <td>{{ row.question }}</td>
+              <td class="action-col">
+                <button
+                  pButton
+                  icon="pi pi-list"
+                  class="p-button-text action-btn"
+                  [routerLink]="['/admin/checklists', checklistId, 'itens', row.id, 'opcoes']"
+                  pTooltip="Opções" tooltipPosition="top" appendTo="body">
+                </button>
+                <button
+                  pButton
+                  icon="pi pi-pencil"
+                  class="p-button-text action-btn"
+                  [routerLink]="['/admin/checklists', checklistId, 'itens', 'editar', row.id]"
+                  pTooltip="Editar item" tooltipPosition="top" appendTo="body">
+                </button>
+                <button
+                  pButton
+                  icon="pi pi-trash"
+                  class="p-button-text p-button-danger action-btn"
+                  (click)="openDeleteConfirm(row)"
+                  [disabled]="deletingId === row.id"
+                  pTooltip="Remover item" tooltipPosition="top" appendTo="body">
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <div class="empty-state">
+              <i class="pi pi-list"></i>
+              <p>Nenhum item encontrado.</p>
+              <span>Adicione perguntas para este checklist.</span>
+            </div>
+          </ng-template>
+
+        </p-table>
+      </div>
+    } @else {
+      <div class="table-skeleton">
+        @for (_ of [1, 2, 3, 4, 5]; track _) {
+          <div class="skeleton-row"></div>
+        }
+      </div>
+    }
+  </div>
+
+  <app-confirm-modal
+    [visible]="showConfirmModal"
+    [title]="'Remover ' + (selectedLabel || 'item') + '?'"
+    message="Esta ação é definitiva. Confirme para seguir."
+    confirmLabel="Remover"
+    cancelLabel="Cancelar"
+    icon="pi pi-trash"
+    [loading]="deletingId === selectedId"
+    (confirm)="confirmDelete()"
+    (cancel)="closeDeleteConfirm()">
+  </app-confirm-modal>
+</section>
+

@@ -1,0 +1,41 @@
+<p-toast position="top-right"></p-toast>
+
+
+<div class="layout">
+  <app-side-nav [items]="items"></app-side-nav>
+
+  <div class="main-area">
+    <header class="topbar">
+      <div class="topbar-left">
+        <app-breadcrumb [crumbs]="crumbs"></app-breadcrumb>
+      </div>
+
+      <div class="topbar-right">
+        <!-- <button
+          type="button"
+          class="topbar-icon-btn"
+          aria-label="Notificaçôes"
+        >
+          <i class="pi pi-bell"></i>
+        </button> -->
+
+        <div class="user-chip">
+          <div class="user-avatar">
+            <span>{{ initials }}</span>
+          </div>
+          <div class="user-info">
+            <span class="user-name">{{ userName || '---' }}</span>
+            <span class="user-role">{{ userRole || '---' }}</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <section class="content-shell">
+        <router-outlet></router-outlet>
+      </section>
+    </main>
+  </div>
+</div>
+
