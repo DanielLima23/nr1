@@ -43,15 +43,15 @@ export class PatientRiskActionPlanCreatePage extends BaseComponent implements On
 
   private loadPlan() {
     if (!this.companyId || !this.patientId || !this.riskId) return;
-    this.service.getById(this.companyId, this.patientId, this.riskId, this.actionPlanId).subscribe({
-      next: (plan) => {
-        const { dueDate, ...rest } = plan || {};
-        this.form.patchValue({
-          ...rest,
-          dueDate: dueDate ? dueDate.substring(0, 10) : '',
-        });
-      },
-      error: () => this.toast.error('Erro ao carregar plano.'),
+      this.service.getById(this.companyId, this.patientId, this.riskId, this.actionPlanId).subscribe({
+        next: (plan) => {
+          const { dueDate, ...rest } = plan || {};
+          this.form.patchValue({
+            ...rest,
+            dueDate: dueDate ? dueDate.substring(0, 10) : '',
+          });
+        },
+      error: () => this.toast.error('Erro ao carregar medida mitigadora.'),
     });
   }
 
@@ -81,18 +81,18 @@ export class PatientRiskActionPlanCreatePage extends BaseComponent implements On
     if (this.actionPlanId) {
       this.service.update(this.companyId, this.patientId, this.riskId, this.actionPlanId, payload).subscribe({
         next: () => {
-          this.toast.success('Plano atualizado com sucesso!');
+          this.toast.success('Medida mitigadora atualizada com sucesso!');
           this.router.navigate(backLink, { queryParams: { companyId: this.companyId } });
         },
-        error: () => this.toast.error('Erro ao atualizar plano.'),
+        error: () => this.toast.error('Erro ao atualizar medida mitigadora.'),
       });
     } else {
       this.service.create(this.companyId, this.patientId, this.riskId, payload).subscribe({
         next: () => {
-          this.toast.success('Plano criado com sucesso!');
+          this.toast.success('Medida mitigadora criada com sucesso!');
           this.router.navigate(backLink, { queryParams: { companyId: this.companyId } });
         },
-        error: () => this.toast.error('Erro ao criar plano.'),
+        error: () => this.toast.error('Erro ao criar medida mitigadora.'),
       });
     }
   }

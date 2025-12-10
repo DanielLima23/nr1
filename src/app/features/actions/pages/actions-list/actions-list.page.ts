@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+ï»¿import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -53,7 +53,7 @@ export class ActionsListPage extends BaseComponent implements OnInit {
       next: () => this.loading.set(false),
       error: () => {
         this.loading.set(false);
-        this.toast.error('Erro ao carregar planos de ação.');
+        this.toast.error('Erro ao carregar medidas mitigadoras.');
       },
     });
   }
@@ -78,14 +78,14 @@ export class ActionsListPage extends BaseComponent implements OnInit {
 
     this.service.deleteById(this.riskId, idToRemove).subscribe({
       next: () => {
-        this.toast.success('Plano de ação removido com sucesso!');
+        this.toast.success('Medida mitigadora removida com sucesso!');
         this.deletingId = null;
         this.selectedId = null;
         this.selectedTitle = '';
       },
       error: () => {
         this.deletingId = null;
-        this.toast.error('Erro ao remover plano de ação.');
+        this.toast.error('Erro ao remover medida mitigadora.');
       },
     });
   }

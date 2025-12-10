@@ -75,18 +75,18 @@ export class ActionsCreatePage extends BaseComponent implements OnInit {
     if (this.planId) {
       this.service.update(this.riskId, this.planId, payload).subscribe({
         next: () => {
-          this.toast.success('Plano de acao atualizado com sucesso!');
+          this.toast.success('Medida mitigadora atualizada com sucesso!');
           this.navigate(this.actionsListLink);
         },
-        error: () => this.toast.error('Erro ao atualizar plano de acao.'),
+        error: () => this.toast.error('Erro ao atualizar medida mitigadora.'),
       });
     } else {
       this.service.create(this.riskId, payload).subscribe({
         next: () => {
-          this.toast.success('Plano de acao criado com sucesso!');
+          this.toast.success('Medida mitigadora criada com sucesso!');
           this.navigate(this.actionsListLink);
         },
-        error: () => this.toast.error('Erro ao criar plano de acao.'),
+        error: () => this.toast.error('Erro ao criar medida mitigadora.'),
       });
     }
   }

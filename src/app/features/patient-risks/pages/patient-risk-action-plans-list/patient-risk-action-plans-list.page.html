@@ -1,6 +1,6 @@
 <app-top-page
-  [title]="riskTitle ? 'Planos de ação - ' + riskTitle : 'Planos de ação'"
-  icon="pi pi-clipboard"
+  [title]="riskTitle ? 'Medidas mitigadoras - ' + riskTitle : 'Medidas mitigadoras'"
+  icon="pi pi-shield"
   [showAdd]="true"
   addLabel="Novo"
   [addLink]="createLink"
@@ -15,8 +15,8 @@
     <div class="table-header">
       <div>
         <p class="eyebrow">Registros</p>
-        <h3>Planos</h3>
-        <p class="subtitle">Planos de ação vinculados a este risco.</p>
+        <h3>Medidas</h3>
+        <p class="subtitle">Medidas mitigadoras vinculadas a este risco.</p>
       </div>
     </div>
 
@@ -32,11 +32,11 @@
 
           <ng-template pTemplate="header">
             <tr>
-              <th>Título</th>
-              <th>Responsável</th>
+              <th>Titulo</th>
+              <th>Responsavel</th>
               <th>Vencimento</th>
               <th>Status</th>
-              <th class="align-right">Ações</th>
+              <th class="align-right">Acoes</th>
             </tr>
           </ng-template>
 
@@ -50,7 +50,7 @@
                   class="status-chip"
                   [class.active]="row.completed"
                   [class.inactive]="!row.completed">
-                  {{ row.completed ? 'Concluído' : 'Pendente' }}
+                  {{ row.completed ? 'Concluido' : 'Pendente' }}
                 </span>
               </td>
               <td class="action-col">
@@ -60,7 +60,7 @@
                   class="p-button-text action-btn"
                   [routerLink]="['/admin/pacientes', patientId, 'riscos', riskId, 'planos', 'editar', row.id]"
                   [queryParams]="{ companyId: companyId }"
-                  pTooltip="Editar plano"
+                  pTooltip="Editar medida"
                   tooltipPosition="top"
                   appendTo="body">
                 </button>
@@ -70,7 +70,7 @@
                   class="p-button-text p-button-danger action-btn"
                   (click)="openDeleteConfirm(row)"
                   [disabled]="deletingId === row.id"
-                  pTooltip="Remover plano"
+                  pTooltip="Remover medida"
                   tooltipPosition="top"
                   appendTo="body">
                 </button>
@@ -80,9 +80,9 @@
 
           <ng-template pTemplate="emptymessage">
             <div class="empty-state">
-              <i class="pi pi-clipboard"></i>
-              <p>Nenhum plano encontrado.</p>
-              <span>Cadastre um plano de ação.</span>
+              <i class="pi pi-shield"></i>
+              <p>Nenhuma medida encontrada.</p>
+              <span>Cadastre uma medida mitigadora.</span>
             </div>
           </ng-template>
         </p-table>
@@ -98,8 +98,8 @@
 
   <app-confirm-modal
     [visible]="showConfirmModal"
-    [title]="'Remover plano?'"
-    message="Esta ação é definitiva. Confirme para prosseguir."
+    [title]="'Remover medida mitigadora?'"
+    message="Esta acao e definitiva. Confirme para prosseguir."
     confirmLabel="Remover"
     cancelLabel="Cancelar"
     icon="pi pi-trash"

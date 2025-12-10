@@ -26,6 +26,11 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
       route: '/admin/dashboard',
     },
     {
+      label: 'Medidas por Setor',
+      icon: 'pi-sitemap',
+      route: '/admin/medidas-metigadoras-empresa',
+    },
+    {
       label: 'Cadastros',
       icon: 'pi-database',
       children: [

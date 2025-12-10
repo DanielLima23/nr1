@@ -12,7 +12,7 @@
       <div>
         <p class="eyebrow">Registros</p>
         <h3>Riscos</h3>
-        <p class="subtitle">Gerencie e acesse planos de ação rapidamente.</p>
+        <p class="subtitle">Gerencie e acesse medidas mitigadoras rapidamente.</p>
       </div>
     </div>
 
@@ -28,12 +28,12 @@
 
           <ng-template pTemplate="header">
             <tr>
-              <th>Título</th>
+              <th>TÇðtulo</th>
               <th>Probabilidade</th>
               <th>Impacto</th>
               <th>Score</th>
               <th>Ativo</th>
-              <th class="align-right">Ações</th>
+              <th class="align-right">AÇõÇæes</th>
             </tr>
           </ng-template>
 
@@ -48,7 +48,7 @@
                   class="status-chip"
                   [class.active]="row.active"
                   [class.inactive]="!row.active">
-                  {{ row.active ? 'Sim' : 'Não' }}
+                  {{ row.active ? 'Sim' : 'NÇœo' }}
                 </span>
               </td>
               <td class="action-col">
@@ -57,7 +57,7 @@
                   icon="pi pi-clipboard"
                   class="p-button-text action-btn"
                   [routerLink]="['/admin/riscos', row.id, 'acoes']"
-                  pTooltip="Planos de ação" tooltipPosition="top" appendTo="body">
+                  pTooltip="Medidas mitigadoras" tooltipPosition="top" appendTo="body">
                 </button>
                 <button
                   pButton
@@ -101,7 +101,7 @@
 <app-confirm-modal
   [visible]="showConfirmModal"
   [title]="'Remover ' + (selectedTitle || 'risco') + '?'"
-  message="Esta ação é definitiva. Confirme para seguir."
+  message="Esta aÇõÇœo Ç¸ definitiva. Confirme para seguir."
   confirmLabel="Remover"
   cancelLabel="Cancelar"
   icon="pi pi-trash"
@@ -109,4 +109,3 @@
   (confirm)="confirmDelete()"
   (cancel)="closeDeleteConfirm()">
 </app-confirm-modal>
-

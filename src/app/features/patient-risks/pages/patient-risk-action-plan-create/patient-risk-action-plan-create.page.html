@@ -1,6 +1,6 @@
 <app-top-page
-  [title]="actionPlanId ? 'Editar plano de ação' : 'Novo plano de ação'"
-  icon="pi pi-clipboard"
+  [title]="actionPlanId ? 'Editar medida mitigadora' : 'Nova medida mitigadora'"
+  icon="pi pi-shield"
   [showBack]="true"
   [backLink]="backLink"
   [backQueryParams]="backQueryParams">
@@ -10,21 +10,21 @@
   <div class="form-card">
     <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
       <div class="field">
-        <label>Título *</label>
-        <input type="text" formControlName="title" placeholder="Título do plano" />
+        <label>Titulo *</label>
+        <input type="text" formControlName="title" placeholder="Titulo da medida" />
         @if (isInvalid('title')) {
-        <small class="error-msg">Informe o título.</small>
+        <small class="error-msg">Informe o titulo.</small>
         }
       </div>
 
       <div class="field" style="grid-column: 1 / -1;">
-        <label>Descrição</label>
-        <textarea rows="3" formControlName="description" placeholder="Descrição"></textarea>
+        <label>Descricao</label>
+        <textarea rows="3" formControlName="description" placeholder="Descricao"></textarea>
       </div>
 
       <div class="field">
-        <label>Responsável</label>
-        <input type="text" formControlName="responsible" placeholder="Nome do responsável" />
+        <label>Responsavel</label>
+        <input type="text" formControlName="responsible" placeholder="Nome do responsavel" />
       </div>
 
       <div class="field">
@@ -37,7 +37,7 @@
         <label class="switch">
           <input type="checkbox" formControlName="completed" />
           <span class="slider"></span>
-          <span class="switch-label">Concluído</span>
+          <span class="switch-label">Concluido</span>
         </label>
       </div>
 

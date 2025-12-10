@@ -49,7 +49,7 @@
                   class="p-button-text action-btn"
                   [routerLink]="['/admin/pacientes', patientId, 'riscos', row.id, 'planos']"
                   [queryParams]="{ companyId: companyId }"
-                  pTooltip="Planos de ação"
+                  pTooltip="Medidas mitigadoras"
                   tooltipPosition="top"
                   appendTo="body">
                 </button>
@@ -107,4 +107,3 @@
     (cancel)="closeDeleteConfirm()">
   </app-confirm-modal>
 </section>
-

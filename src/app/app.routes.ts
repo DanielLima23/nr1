@@ -67,6 +67,14 @@ export const appRoutes: Routes = [
           ),
       },
       {
+        path: 'medidas-metigadoras-empresa',
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./features/company-action-plans/company-action-plans.routes').then(
+            (m) => m.COMPANY_ACTION_PLANS_ROUTES
+          ),
+      },
+      {
         path: 'checklists',
         canActivate: [authGuard],
         loadChildren: () =>

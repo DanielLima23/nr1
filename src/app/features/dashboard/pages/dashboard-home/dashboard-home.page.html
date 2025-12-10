@@ -1,4 +1,4 @@
-<app-top-page
+﻿<app-top-page
   title="Dashboard"
   icon="pi pi-chart-bar"
   [showBack]="false">
@@ -16,9 +16,9 @@
   <div class="table-card">
     <div class="table-header">
       <div>
-        <p class="eyebrow">Visão geral</p>
-        <h3>Planos por empresa</h3>
-        <p class="subtitle">Progresso de planos de ação por empresa.</p>
+        <p class="eyebrow">Visao geral</p>
+        <h3>Medidas mitigadoras por empresa</h3>
+        <p class="subtitle">Progresso de medidas mitigadoras por empresa.</p>
       </div>
       <div class="header-actions">
         <button pButton type="button" icon="pi pi-refresh" class="p-button-text" (click)="load()">
@@ -38,7 +38,7 @@
         <ng-template pTemplate="header">
           <tr>
             <th>Empresa</th>
-            <th class="align-right">Planos</th>
+            <th class="align-right">Medidas</th>
             <th style="width: 260px;">Progresso</th>
           </tr>
         </ng-template>

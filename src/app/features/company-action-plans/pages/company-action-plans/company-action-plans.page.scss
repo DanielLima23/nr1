@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+.filters-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  margin-bottom: 1rem;
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 260px;
+
+    label {
+      font-size: 0.9rem;
+      color: #374151;
+      font-weight: 600;
+    }
+  }
+}
+
+.info-pill {
+  background: #eef2ff;
+  color: #4338ca;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.sector-accordion {
+  .p-accordion-tab {
+    .p-accordion-header-text {
+      font-weight: 700;
+    }
+  }
+}
+
+.plan-title {
+  font-weight: 700;
+  color: #111827;
+  font-size: 0.95rem;
+}
+
+.plan-description {
+  color: #4b5563;
+  margin-top: 0.15rem;
+  font-size: 0.9rem;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.plan-meta {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+  color: #6b7280;
+  font-size: 0.8rem;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+}
+
+.empty-sector {
+  padding: 1rem 0.5rem;
+  color: #6b7280;
+}
+
+.action-col {
+  display: flex;
+  gap: 0.35rem;
+  justify-content: flex-end;
+}
+
+.status-dropdown {
+  width: 100%;
+}
+
+.company-meta {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.total-pill {
+  margin-bottom: 0.75rem;
+  display: inline-flex;
+}
+
+.company-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.company-name {
+  font-weight: 700;
+  color: #0f172a;
+  margin-right: 0.25rem;
+}
+
+.sector-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sector-name {
+  font-weight: 700;
+  color: #111827;
+}
+
+.company-accordion .p-accordion-content {
+  padding-top: 0.25rem;
+}
+
+.status-dropdown .p-dropdown-label,
+.status-dropdown .p-dropdown-item,
+.status-option span {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.92rem;
+}
+
+.editable-input,
+.date-input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.92rem;
+}
+
+.date-input {
+  height: 2.75rem; /* match PrimeNG input height */
+  padding: 0 0.65rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  color: #111827;
+  font-size: 0.95rem;
+}
+
+.status-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  display: inline-block;
+  background: #f59e0b;
+}
+
+.status-dot.status-progress {
+  background: #3b82f6;
+}
+
+.status-dot.status-ok {
+  background: #10b981;
+}
+
+.detail-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  font-family: 'Montserrat', sans-serif;
+
+  .detail-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+
+    strong {
+      font-weight: 700;
+    }
+
+    span {
+      color: #374151;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+  }
+}

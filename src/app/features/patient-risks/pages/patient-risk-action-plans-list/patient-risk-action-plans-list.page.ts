@@ -92,12 +92,12 @@ export class PatientRiskActionPlansListPage extends BaseComponent implements OnI
     this.confirmLoading = true;
     this.service.remove(this.companyId, this.patientId, this.riskId, id).subscribe({
       next: () => {
-        this.toast.success('Plano removido com sucesso!');
+        this.toast.success('Medida mitigadora removida com sucesso!');
         this.closeDeleteConfirm();
         this.load();
       },
       error: () => {
-        this.toast.error('Erro ao remover plano.');
+        this.toast.error('Erro ao remover medida mitigadora.');
         this.deletingId = null;
         this.confirmLoading = false;
       },

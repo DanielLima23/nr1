@@ -1,0 +1,186 @@
+﻿<app-top-page
+  title="Medidas mitigadoras por setor"
+  icon="pi pi-sitemap">
+</app-top-page>
+
+<section class="page-shell">
+  @if (!companies.length) {
+    <div class="empty-state">
+      <i class="pi pi-briefcase"></i>
+      <p>Carregando empresas...</p>
+      <span>As medidas aparecerão agrupadas por empresa e setor.</span>
+    </div>
+  } @else {
+    <div class="info-pill total-pill">Empresas: {{ totalCompanies() }}</div>
+    <p-accordion [multiple]="true" class="company-accordion">
+      @for (cg of companies; track cg.company?.id) {
+        <p-accordionTab [header]="''">
+          <ng-template pTemplate="header">
+            <div class="company-header">
+              <span class="company-name">{{ cg.company?.name || 'Empresa' }}</span>
+              <span class="info-pill">Setores: {{ cg.sectors.length || 0 }}</span>
+              <span class="info-pill">Medidas ({{ countCompleted(cg) }}/{{ totalPlans(cg) }})</span>
+            </div>
+          </ng-template>
+
+          @if (cg.loading) {
+            <div class="table-skeleton">
+              @for (_ of [1, 2, 3, 4]; track _) {
+                <div class="skeleton-row"></div>
+              }
+            </div>
+          } @else if (!cg.groups.length) {
+            <div class="empty-state">
+              <i class="pi pi-sitemap"></i>
+              <p>Nao encontramos setores com medidas.</p>
+              <span>Verifique se a empresa possui setores e medidas cadastradas.</span>
+            </div>
+          } @else {
+            <p-accordion [multiple]="true" class="sector-accordion">
+              @for (group of cg.groups; track group.id) {
+                <p-accordionTab [header]="''">
+                  <ng-template pTemplate="header">
+                    <div class="sector-header">
+                      <span class="sector-name">{{ group.name || 'Setor' }}</span>
+                      <span class="info-pill" *ngIf="group.plans?.length">
+                        Medidas ({{ countCompletedGroup(group) }}/{{ group.plans?.length || 0 }})
+                      </span>
+                    </div>
+                  </ng-template>
+                  @if (!group.plans.length) {
+                    <div class="empty-sector">
+                      <p>Sem medidas para este setor.</p>
+                    </div>
+                  } @else {
+                    <p-table [value]="group.plans" responsiveLayout="scroll" [paginator]="false" class="accent-table">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>Medida</th>
+                          <th>Responsavel</th>
+                          <th>Vencimento</th>
+                          <th>Status</th>
+                          <th class="align-right">Acoes</th>
+                        </tr>
+                      </ng-template>
+
+                      <ng-template pTemplate="body" let-row>
+                        @if (getForm(row.id); as form) {
+                          <tr [formGroup]="form">
+                            <td>
+                              <div class="plan-title">{{ row.title || 'Sem titulo' }}</div>
+                              <div class="plan-meta">
+                                <span *ngIf="row.jobFunctionName">Funcao: {{ row.jobFunctionName }}</span>
+                                <span *ngIf="row.patientName">Paciente: {{ row.patientName }}</span>
+                                <span *ngIf="row.riskTitle">Medida mitigadora: {{ row.riskTitle }}</span>
+                              </div>
+                            </td>
+                            <td>
+                              <input type="text" pInputText formControlName="responsible" placeholder="Responsavel" class="editable-input" />
+                            </td>
+                            <td>
+                              <input type="date" formControlName="dueDate" class="date-input" />
+                            </td>
+                            <td>
+                              <p-dropdown
+                                [options]="statusOptions"
+                                optionLabel="label"
+                                optionValue="value"
+                                formControlName="status"
+                                styleClass="status-dropdown"
+                                appendTo="body">
+                                <ng-template pTemplate="selectedItem" let-selected>
+                                  <div class="status-option">
+                                    <span class="status-dot" [ngClass]="statusClass(selected?.value)"></span>
+                                    <span>{{ selected?.label }}</span>
+                                  </div>
+                                </ng-template>
+                                <ng-template pTemplate="item" let-opt>
+                                  <div class="status-option">
+                                    <span class="status-dot" [ngClass]="statusClass(opt.value)"></span>
+                                    <span>{{ opt.label }}</span>
+                                  </div>
+                                </ng-template>
+                              </p-dropdown>
+                            </td>
+                            <td class="action-col">
+                              <button
+                                pButton
+                                type="button"
+                                class="p-button-text"
+                                icon="pi pi-refresh"
+                                (click)="resetPlanForm(row.id)"
+                                [disabled]="savingPlanId === row.id"
+                                pTooltip="Resetar campos"
+                                tooltipPosition="top"
+                                appendTo="body">
+                              </button>
+                              <button
+                                pButton
+                                type="button"
+                                class="p-button-text"
+                                icon="pi pi-eye"
+                                (click)="openDetail(row)"
+                                pTooltip="Ver detalhes"
+                                tooltipPosition="top"
+                                appendTo="body">
+                              </button>
+                              <button
+                                pButton
+                                type="button"
+                                class="p-button-text p-button-success"
+                                icon="pi pi-check"
+                                (click)="savePlan(row.id)"
+                                [disabled]="savingPlanId === row.id"
+                                pTooltip="Salvar medida"
+                                tooltipPosition="top"
+                                appendTo="body">
+                              </button>
+                            </td>
+                          </tr>
+                        } @else {
+                          <tr>
+                            <td colspan="5">Medida sem identificador.</td>
+                          </tr>
+                        }
+                      </ng-template>
+
+                      <ng-template pTemplate="emptymessage">
+                        <div class="empty-sector">
+                          <p>Nenhuma medida encontrada.</p>
+                        </div>
+                      </ng-template>
+                    </p-table>
+                  }
+                </p-accordionTab>
+              }
+            </p-accordion>
+          }
+        </p-accordionTab>
+      }
+    </p-accordion>
+  }
+</section>
+
+<p-dialog
+  header="Detalhes da medida mitigadora"
+  [(visible)]="detailVisible"
+  [modal]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '480px' }"
+  (onHide)="closeDetail()">
+  <div class="detail-dialog">
+    <div class="detail-row">
+      <strong>Titulo:</strong>
+      <span>{{ detailData.title || '-' }}</span>
+    </div>
+    <div class="detail-row" *ngIf="detailData.description">
+      <strong>Descricao:</strong>
+      <span>{{ detailData.description }}</span>
+    </div>
+    <div class="detail-row" *ngIf="detailData.riskTitle">
+      <strong>Medida mitigadora:</strong>
+      <span>{{ detailData.riskTitle }}</span>
+    </div>
+  </div>
+</p-dialog>
