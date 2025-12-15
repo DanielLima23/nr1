@@ -9,7 +9,19 @@
     <div class="stat-card">
       <p class="eyebrow">Empresas monitoradas</p>
       <h2>{{ totalCount }}</h2>
-      <p class="muted">Total retornado pelo endpoint</p>
+      <p class="muted">Total de empresas com planos setoriais</p>
+    </div>
+
+    <div class="stat-card">
+      <p class="eyebrow">Planos setoriais</p>
+      <h2>{{ totalPlans() }}</h2>
+      <p class="muted">Soma do que o endpoint SectorActionPlans retorna</p>
+    </div>
+
+    <div class="stat-card">
+      <p class="eyebrow">Planos concluídos</p>
+      <h2>{{ completedPlans() }}</h2>
+      <p class="muted">Finalizados conforme status/flag do endpoint</p>
     </div>
   </div>
 
@@ -18,7 +30,7 @@
       <div>
         <p class="eyebrow">Visao geral</p>
         <h3>Medidas mitigadoras por empresa</h3>
-        <p class="subtitle">Progresso de medidas mitigadoras por empresa.</p>
+        <p class="subtitle">Progresso agregado a partir de SectorActionPlans.</p>
       </div>
       <div class="header-actions">
         <button pButton type="button" icon="pi pi-refresh" class="p-button-text" (click)="load()">
@@ -38,7 +50,7 @@
         <ng-template pTemplate="header">
           <tr>
             <th>Empresa</th>
-            <th class="align-right">Medidas</th>
+            <th class="align-right">Planos (concluídos/total)</th>
             <th style="width: 260px;">Progresso</th>
           </tr>
         </ng-template>

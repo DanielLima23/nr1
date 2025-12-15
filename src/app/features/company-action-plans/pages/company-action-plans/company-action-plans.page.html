@@ -42,8 +42,8 @@
                   <ng-template pTemplate="header">
                     <div class="sector-header">
                       <span class="sector-name">{{ group.name || 'Setor' }}</span>
-                      <span class="info-pill" *ngIf="group.plans?.length">
-                        Medidas ({{ countCompletedGroup(group) }}/{{ group.plans?.length || 0 }})
+                      <span class="info-pill" *ngIf="group.plans.length">
+                        Medidas ({{ countCompletedGroup(group) }}/{{ group.plans.length || 0 }})
                       </span>
                     </div>
                   </ng-template>

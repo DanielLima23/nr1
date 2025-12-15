@@ -5,6 +5,7 @@ import { BaseCrudService } from '../../../shared/services/base-crud/base-crud.se
 export interface CompanyActionPlan {
   id?: string;
   planId?: string;
+  companyId?: string;
   jobFunctionId?: string;
   jobFunctionName?: string;
   patientRiskId?: string;
@@ -30,34 +31,37 @@ export interface CompanyActionPlanUpdatePayload {
 
 @Injectable({ providedIn: 'root' })
 export class CompanyActionPlansService extends BaseCrudService {
-  list(companyId: string): Observable<CompanyActionPlan[]> {
-    return this.get<any[]>(`companies/${companyId}/action-plans`).pipe(
-      // API retorna agrupado por funÁÆo/sector; aqui achatamos para facilitar o template.
-      map((data: any[] = []) => {
-        const flat: CompanyActionPlan[] = [];
-
-        data.forEach((group) => {
-          const plans = Array.isArray(group?.plans) ? group.plans : [];
-          plans.forEach((plan: any) => {
-            const planId = plan?.planId || plan?.id;
-            flat.push({
-              ...plan,
-              id: planId,
-              planId,
-              sectorId: group?.sectorId,
-              sectorName: group?.sectorName,
-              jobFunctionId: group?.jobFunctionId,
-              jobFunctionName: group?.jobFunctionName,
-            });
-          });
-        });
-
-        return flat;
-      })
+  list(companyId: string, sectorId: string): Observable<CompanyActionPlan[]> {
+    return this.get<any>(`companies/${companyId}/sectors/${sectorId}/action-plans`).pipe(
+      map((res) => this.normalizePlans(res))
     );
   }
 
-  update(companyId: string, planId: string, body: CompanyActionPlanUpdatePayload): Observable<any> {
-    return this.put<any>(`companies/${companyId}/action-plans/${planId}`, body);
+  getById(companyId: string, sectorId: string, planId: string): Observable<CompanyActionPlan> {
+    return this.get<CompanyActionPlan>(
+      `companies/${companyId}/sectors/${sectorId}/action-plans/${planId}`
+    );
+  }
+
+  update(
+    companyId: string,
+    sectorId: string,
+    planId: string,
+    body: CompanyActionPlanUpdatePayload
+  ): Observable<any> {
+    return this.put<any>(
+      `companies/${companyId}/sectors/${sectorId}/action-plans/${planId}`,
+      body
+    );
+  }
+
+  private normalizePlans(data: any): CompanyActionPlan[] {
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data?.items)) return data.items;
+    if (Array.isArray(data?.data)) return data.data;
+    if (Array.isArray(data?.value)) return data.value;
+    if (Array.isArray(data?.plans)) return data.plans;
+    if (Array.isArray(data?.result)) return data.result;
+    return [];
   }
 }

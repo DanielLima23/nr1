@@ -28,14 +28,17 @@ export class DashboardHomePage extends BaseComponent implements OnInit {
     this.load();
   }
 
-  load(page = this.page) {
-    this.page = page;
+  load(page = 1) {
+    this.page = page || 1;
     this.loading.set(true);
-    this.service.getCompanies(this.page, this.pageSize).subscribe({
+    this.service.getCompanies(this.page).subscribe({
       next: (res) => {
         this.loading.set(false);
         this.companies = res?.items || [];
-        this.totalCount = res?.totalCount || 0;
+        const fallbackLength = this.companies.length || 0;
+        this.totalCount = res?.totalCount ?? fallbackLength;
+        const fallbackPageSize = this.companies.length || this.pageSize;
+        this.pageSize = res?.pageSize ?? fallbackPageSize;
       },
       error: () => {
         this.loading.set(false);
@@ -46,5 +49,22 @@ export class DashboardHomePage extends BaseComponent implements OnInit {
 
   progressLabel(item: DashboardCompany) {
     return `${item.completedPlans}/${item.totalPlans} planos`;
+  }
+
+  totalPlans(): number {
+    return this.companies.reduce((acc, item) => acc + (item.totalPlans || 0), 0);
+  }
+
+  completedPlans(): number {
+    return this.companies.reduce(
+      (acc, item) => acc + (item.completedPlans || 0),
+      0
+    );
+  }
+
+  overallProgress(): number {
+    const total = this.totalPlans();
+    const completed = this.completedPlans();
+    return total > 0 ? Math.round((completed / total) * 100) : 0;
   }
 }

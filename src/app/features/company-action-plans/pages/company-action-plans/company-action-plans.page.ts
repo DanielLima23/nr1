@@ -1,6 +1,7 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { catchError, forkJoin, map, of } from 'rxjs';
 import { DropdownModule } from 'primeng/dropdown';
 import { AccordionModule } from 'primeng/accordion';
 import { TableModule } from 'primeng/table';
@@ -179,6 +180,11 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
       (cached as any).company?.id?.toString?.() ||
       (cached as any).companyId ||
       '';
+    const sectorId =
+      (cached as any)['sectorId']?.toString?.() ||
+      (cached as any).sector?.id?.toString?.() ||
+      (cached as any).sectorId ||
+      '';
 
     if (!companyId) {
       this.toast.error('Empresa não identificada para esta medida.');
@@ -186,7 +192,13 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
       return;
     }
 
-    this.plansService.update(companyId, planId.toString(), payload).subscribe({
+    if (!sectorId) {
+      this.toast.error('Setor não identificado para esta medida.');
+      this.savingPlanId = null;
+      return;
+    }
+
+    this.plansService.update(companyId, sectorId, planId.toString(), payload).subscribe({
       next: () => {
         this.toast.success('Medida mitigadora atualizada com sucesso!');
         this.savingPlanId = null;
@@ -226,18 +238,47 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
 
     this.clearCompanyEntries(companyId);
     target.loading = true;
+
     this.sectorService.list(companyId).subscribe({
       next: (sectors) => {
         target.sectors = sectors || [];
-        this.plansService.list(companyId).subscribe({
-          next: (plans) => {
-            const safePlans = (plans || []).map((p) => ({ ...p, companyId }));
-            safePlans.forEach((plan) => {
-              const planId = plan?.id !== undefined && plan?.id !== null ? plan.id.toString() : null;
+
+        const sectorCalls = (target.sectors || []).map((sector) => {
+          const sectorId = sector.id?.toString?.() || sector.id;
+          if (!sectorId) return of<CompanyActionPlan[]>([]);
+          return this.plansService
+            .list(companyId, sectorId)
+            .pipe(
+              map((plans: CompanyActionPlan[]) =>
+                (plans || []).map((plan: CompanyActionPlan) => ({
+                  ...plan,
+                  companyId,
+                  sectorId,
+                  sectorName: plan?.sectorName ?? sector.name,
+                }))
+              ),
+              catchError(() => of<CompanyActionPlan[]>([]))
+            );
+        });
+
+        if (!sectorCalls.length) {
+          target.groups = this.buildGroups([], target.sectors);
+          target.loading = false;
+          return;
+        }
+
+        forkJoin(sectorCalls).subscribe({
+          next: (plansBySector: CompanyActionPlan[][]) => {
+            const safePlans: CompanyActionPlan[] = (plansBySector || []).flat();
+            safePlans.forEach((plan: CompanyActionPlan) => {
+              const planId =
+                plan?.id !== undefined && plan?.id !== null ? plan.id.toString() : null;
               if (planId) {
-                this.planCache.set(planId, { ...plan, id: planId, companyId });
+                this.planCache.set(planId, { ...plan, id: planId, companyId: plan.companyId });
+                this.forms.set(planId, this.createForm(plan));
               }
             });
+
             target.groups = this.buildGroups(safePlans, target.sectors);
             target.loading = false;
           },
@@ -255,12 +296,12 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
   }
 
   private buildGroups(plans: CompanyActionPlan[], sectors: Sector[]) {
-    const map = new Map<string, SectorGroup>();
+    const mapGroups = new Map<string, SectorGroup>();
     const ensureGroup = (id: string, name: string) => {
-      if (!map.has(id)) {
-        map.set(id, { id, name, plans: [] });
+      if (!mapGroups.has(id)) {
+        mapGroups.set(id, { id, name, plans: [] });
       }
-      return map.get(id)!;
+      return mapGroups.get(id)!;
     };
 
     sectors.forEach((sector) => {
@@ -269,7 +310,8 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
     });
 
     plans.forEach((plan) => {
-      const planId = plan?.id !== undefined && plan?.id !== null ? plan.id.toString() : null;
+      const planId =
+        plan?.id !== undefined && plan?.id !== null ? plan.id.toString() : null;
       const sectorId =
         plan.sectorId?.toString() ||
         (plan as any).sectorId ||
@@ -288,7 +330,7 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
       }
     });
 
-    return Array.from(map.values());
+    return Array.from(mapGroups.values());
   }
 
   private createForm(plan: CompanyActionPlan): FormGroup {
