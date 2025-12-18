@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  nr1-web:
+    build: .
+    ports:
+      - "4200:80"
+    container_name: nr1-web-app
+    restart: unless-stopped

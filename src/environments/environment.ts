@@ -1,4 +1,4 @@
 export const environment = {
-  apiUrl: 'http://187.75.79.243:8085/',
+  apiUrl: 'http://localhost:8055/',
   useMockAuth: false,
 };
