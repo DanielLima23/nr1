@@ -34,6 +34,7 @@ export class PatientRiskCreatePage extends BaseComponent implements OnInit {
   riskIdParam = this.route.snapshot.params['riskId'];
   submitted = false;
   backQueryParams = this.companyId ? { companyId: this.companyId } : null;
+  pageTitle = 'Novo risco do paciente';
 
   risksOptions: any[] = [];
 
@@ -46,6 +47,8 @@ export class PatientRiskCreatePage extends BaseComponent implements OnInit {
     this.loadRisks();
     if (this.riskIdParam) {
       this.loadRisk(this.riskIdParam);
+    } else {
+      this.pageTitle = 'Novo risco do paciente';
     }
   }
 
@@ -69,6 +72,7 @@ export class PatientRiskCreatePage extends BaseComponent implements OnInit {
           riskId: risk.riskId,
           notes: risk.notes,
         });
+        this.pageTitle = `Editar risco do paciente ${risk?.riskTitle ?? ''}`.trim();
       },
       error: () => this.toast.error('Erro ao carregar risco.'),
     });

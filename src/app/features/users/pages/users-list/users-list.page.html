@@ -45,7 +45,9 @@
               </td>
 
               <td>
-                <span class="profile-chip">{{ profilesMap[row.profile] }}</span>
+                <span class="profile-chip" [ngClass]="getProfileClass(row.profile)">
+                  {{ profilesMap[row.profile] }}
+                </span>
               </td>
 
               <td>
@@ -98,35 +100,15 @@
   </div>
 </section>
 
-@if (showConfirmModal) {
-  <div class="confirm-overlay" (click)="closeDeleteConfirm()">
-    <div class="confirm-dialog" (click)="$event.stopPropagation()">
-      <div class="dialog-icon">
-        <i class="pi pi-exclamation-triangle"></i>
-      </div>
-      <div class="dialog-body">
-        <p class="eyebrow">Confirmação</p>
-        <h3>Remover {{ selectedUserName || 'usuário' }}?</h3>
-        <p class="subtitle">
-          Esta ação é definitiva. Confirme para seguir com a exclusão.
-        </p>
-      </div>
-      <div class="dialog-actions">
-        <button pButton class="p-button-text" type="button" (click)="closeDeleteConfirm()">
-          Cancelar
-        </button>
-        <button
-          pButton
-          type="button"
-          icon="pi pi-trash"
-          class="p-button-danger"
-          (click)="confirmDelete()"
-          [disabled]="deletingId === selectedUserId">
-          Remover
-        </button>
-      </div>
-    </div>
-  </div>
-}
-
+<app-confirm-modal
+  [visible]="showConfirmModal"
+  [title]="'Remover ' + (selectedUserName || 'usuario') + '?'"
+  message="Esta acao e definitiva. Confirme para seguir com a exclusao."
+  confirmLabel="Remover"
+  cancelLabel="Cancelar"
+  icon="pi pi-trash"
+  [loading]="deletingId === selectedUserId"
+  (confirm)="confirmDelete()"
+  (cancel)="closeDeleteConfirm()">
+</app-confirm-modal>
 

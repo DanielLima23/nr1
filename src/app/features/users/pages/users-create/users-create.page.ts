@@ -27,6 +27,7 @@ export class UsersCreatePage extends BaseComponent implements OnInit {
   service = inject(UsersService);
 
   userId: string | null = null;
+  pageTitle = 'Novo usuario';
   profiles: any[] = [];
   submitted = false;
 
@@ -46,6 +47,7 @@ export class UsersCreatePage extends BaseComponent implements OnInit {
         paramId && paramId !== 'criar' && paramId !== 'create' ? paramId : null;
 
       this.userId = normalizedId;
+      this.pageTitle = this.userId ? 'Editar usuario' : 'Novo usuario';
 
       if (this.userId) {
         this.form.get('username')?.disable();
@@ -87,6 +89,7 @@ export class UsersCreatePage extends BaseComponent implements OnInit {
             username: user.username,
             active: user.active,
           });
+          this.pageTitle = `Editar usuario ${user.name || ''}`.trim();
 
           const profileId = String(user.profile);
 

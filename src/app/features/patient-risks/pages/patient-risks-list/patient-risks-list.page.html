@@ -1,5 +1,5 @@
 <app-top-page
-  title="Riscos do paciente"
+  title="Riscos do trabalhador(a)"
   icon="pi pi-exclamation-triangle"
   [showAdd]="true"
   addLabel="Novo"
@@ -16,7 +16,7 @@
       <div>
         <p class="eyebrow">Registros</p>
         <h3>Riscos</h3>
-        <p class="subtitle">Gerencie riscos associados ao paciente.</p>
+        <p class="subtitle">Gerencie riscos associados ao trabalhador(a).</p>
       </div>
     </div>
 
@@ -47,7 +47,7 @@
                   pButton
                   icon="pi pi-list"
                   class="p-button-text action-btn"
-                  [routerLink]="['/admin/pacientes', patientId, 'riscos', row.id, 'planos']"
+                  [routerLink]="['/admin/trabalhador(a)s', patientId, 'riscos', row.id, 'planos']"
                   [queryParams]="{ companyId: companyId }"
                   pTooltip="Medidas mitigadoras"
                   tooltipPosition="top"
@@ -57,7 +57,7 @@
                   pButton
                   icon="pi pi-pencil"
                   class="p-button-text action-btn"
-                  [routerLink]="['/admin/pacientes', patientId, 'riscos', 'editar', row.id]"
+                  [routerLink]="['/admin/trabalhador(a)s', patientId, 'riscos', 'editar', row.id]"
                   [queryParams]="{ companyId: companyId }"
                   pTooltip="Editar risco"
                   tooltipPosition="top"
@@ -81,7 +81,7 @@
             <div class="empty-state">
               <i class="pi pi-exclamation-triangle"></i>
               <p>Nenhum risco encontrado.</p>
-              <span>Cadastre um risco para este paciente.</span>
+              <span>Cadastre um risco para este trabalhador(a).</span>
             </div>
           </ng-template>
         </p-table>
@@ -107,3 +107,4 @@
     (cancel)="closeDeleteConfirm()">
   </app-confirm-modal>
 </section>
+

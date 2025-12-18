@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+﻿import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { SideNavComponent, SideNavItem } from '../side-nav/side-nav.component';
 import { ToastModule } from 'primeng/toast';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { BreadcrumbComponent, Crumb } from '../../../shared/components/breadcrumb/breadcrumb.component';
 import { filter, Subscription } from 'rxjs';
+import { PERMISSIONS } from '../../../shared/classes/tipo-permissaso';
 
 @Component({
   selector: 'app-main-layout',
@@ -18,34 +19,12 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   private storage = inject(LocalStorageService);
   private router = inject(Router);
   private navigationSub?: Subscription;
+  userRole = '';
+  private userRoleNormalized = '';
 
-  items: SideNavItem[] = [
-    {
-      label: 'Dashboard',
-      icon: 'pi-home',
-      route: '/admin/dashboard',
-    },
-    {
-      label: 'Medidas por Setor',
-      icon: 'pi-sitemap',
-      route: '/admin/medidas-metigadoras-empresa',
-    },
-    {
-      label: 'Cadastros',
-      icon: 'pi-database',
-      children: [
-        { label: 'Usuarios', icon: 'pi-users', route: '/admin/usuarios' },
-        // { label: 'Perfis', icon: 'pi-id-card', route: '/perfil' },
-        { label: 'Empresa', icon: 'pi-briefcase', route: '/admin/empresa' },
-        { label: 'Riscos', icon: 'pi-exclamation-triangle', route: '/admin/riscos' },
-        { label: 'Pacientes', icon: 'pi-id-card', route: '/admin/pacientes' },
-        { label: 'Checklists', icon: 'pi-clipboard', route: '/admin/checklists' },
-      ],
-    },
-  ];
+  items: SideNavItem[] = [];
 
   userName = '';
-  userRole = '';
   crumbs: Crumb[] = [{ label: 'Dashboard', link: '/admin/dashboard', icon: 'pi pi-home' }];
 
   ngOnInit(): void {
@@ -54,6 +33,8 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
 
     this.userName = user?.given_name || '';
     this.userRole = user?.role || '';
+    this.userRoleNormalized = (this.userRole || '').toString().toLowerCase();
+    this.buildMenu();
 
     this.updateCrumbs(this.router.url);
     this.navigationSub = this.router.events
@@ -96,6 +77,8 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
 
   private formatLabel(seg: string): string {
     const spaced = seg.replace(/-/g, ' ');
+    const normalized = spaced.toLowerCase();
+    if (normalized === 'pacientes' || normalized === 'paciente') return 'Trabalhador(a)';
     return spaced.charAt(0).toUpperCase() + spaced.slice(1);
   }
 
@@ -106,5 +89,63 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
     const last = parts.length > 1 ? parts[parts.length - 1][0] : '';
     const pair = (first + last).toUpperCase();
     return pair || first.toUpperCase() || '--';
+  }
+
+  private buildMenu() {
+    const admin = PERMISSIONS.ADMINISTRADOR.toLowerCase();
+    const medico = PERMISSIONS.MEDICO.toLowerCase();
+    const engenheiro = PERMISSIONS.ENGENHEIRO.toLowerCase();
+    const empresa = PERMISSIONS.EMPRESA.toLowerCase();
+
+    const dashboard: SideNavItem = {
+      label: 'Dashboard',
+      icon: 'pi-home',
+      route: '/admin/dashboard',
+      requiredRoles: [admin, medico, engenheiro],
+    };
+
+    const medidasSetor: SideNavItem = {
+      label: 'Medidas por Setor',
+      icon: 'pi-sitemap',
+      route: '/admin/medidas-metigadoras-empresa',
+      requiredRoles: [admin, engenheiro, empresa],
+    };
+
+    const cadastrosChildren: SideNavItem[] = [
+      { label: 'Usuarios', icon: 'pi-users', route: '/admin/usuarios', requiredRoles: [admin] },
+      { label: 'Empresa', icon: 'pi-briefcase', route: '/admin/empresa', requiredRoles: [admin, engenheiro] },
+      { label: 'Riscos', icon: 'pi-exclamation-triangle', route: '/admin/riscos', requiredRoles: [admin, engenheiro] },
+      { label: 'Trabalhador(a)', icon: 'pi-id-card', route: '/admin/pacientes', requiredRoles: [admin, medico, engenheiro] },
+      { label: 'Checklists', icon: 'pi-clipboard', route: '/admin/checklists', requiredRoles: [admin, engenheiro] },
+    ];
+
+    if (this.userRoleNormalized === empresa) {
+      this.items = [dashboard, medidasSetor].filter((i) => i.requiredRoles?.includes(empresa));
+      return;
+    }
+
+    if (this.userRoleNormalized === medico) {
+      this.items = [
+        dashboard,
+        {
+          label: 'Trabalhador(a)',
+          icon: 'pi-id-card',
+          route: '/admin/pacientes',
+          requiredRoles: [medico, admin, engenheiro],
+        },
+      ];
+      return;
+    }
+
+    this.items = [
+      dashboard,
+      medidasSetor,
+      {
+        label: 'Cadastros',
+        icon: 'pi-database',
+        children: cadastrosChildren,
+        requiredRoles: [admin, medico, engenheiro],
+      },
+    ];
   }
 }

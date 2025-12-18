@@ -8,6 +8,7 @@ import {
   JobFunction,
 } from '../../services/jobfunction.service';
 import { BaseComponent } from '../../../../shared/components/base-component/base-component';
+import { ActivatedRoute } from '@angular/router';
 import { TopPageComponent } from '../../../../shared/components/top-page/top-page.component';
 
 @Component({
@@ -27,11 +28,13 @@ import { TopPageComponent } from '../../../../shared/components/top-page/top-pag
 export class JobFunctionCreatePage extends BaseComponent implements OnInit {
   fb = inject(FormBuilder);
   service = inject(JobFunctionService);
+  private activatedRoute = inject(ActivatedRoute);
 
   companyId!: string;
   sectorId!: string;
   jobFunctionId?: string;
   submitted = false;
+  pageTitle = 'Nova funcao';
 
   form = this.fb.group({
     name: ['', Validators.required],
@@ -39,16 +42,19 @@ export class JobFunctionCreatePage extends BaseComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.companyId = this.route.snapshot.params['id'];
-    this.sectorId = this.route.snapshot.params['sectorId'];
-    this.jobFunctionId = this.route.snapshot.params['jobFunctionId'];
+    this.companyId = this.getRouteParam('id') ?? '';
+    this.sectorId = this.getRouteParam('sectorId') ?? '';
+    this.jobFunctionId = this.getRouteParam('jobFunctionId') ?? undefined;
 
     if (this.jobFunctionId) {
       this.service
         .getById(this.companyId, this.sectorId, this.jobFunctionId)
         .subscribe((jobFunction) => {
           this.form.patchValue(jobFunction);
+          this.pageTitle = `Editar funcao ${jobFunction?.name ?? ''}`.trim();
         });
+    } else {
+      this.pageTitle = 'Nova funcao';
     }
   }
 
@@ -82,6 +88,18 @@ export class JobFunctionCreatePage extends BaseComponent implements OnInit {
         error: () => this.toast.error('Erro ao criar funcao.'),
       });
     }
+  }
+
+  private getRouteParam(key: string): string | null {
+    let current: ActivatedRoute | null = this.activatedRoute;
+    while (current) {
+      const value = current.snapshot?.params?.[key];
+      if (value !== undefined) {
+        return value;
+      }
+      current = current.parent;
+    }
+    return null;
   }
 }
 

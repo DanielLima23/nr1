@@ -21,6 +21,7 @@ export class ChecklistItemsCreatePage extends BaseComponent implements OnInit {
   checklistId = this.route.snapshot.params['checklistId'];
   itemId = this.route.snapshot.params['itemId'];
   submitted = false;
+  pageTitle = 'Novo item';
 
   form = this.fb.group({
     question: ['', Validators.required],
@@ -34,9 +35,14 @@ export class ChecklistItemsCreatePage extends BaseComponent implements OnInit {
   ngOnInit(): void {
     if (this.checklistId && this.itemId) {
       this.service.getById(this.checklistId, this.itemId).subscribe({
-        next: (data) => this.form.patchValue({ question: data.question, order: data.order }),
+        next: (data) => {
+          this.form.patchValue({ question: data.question, order: data.order });
+          this.pageTitle = `Editar item ${data?.question ?? ''}`.trim();
+        },
         error: () => this.toast.error('Erro ao carregar item.'),
       });
+    } else {
+      this.pageTitle = 'Novo item';
     }
   }
 

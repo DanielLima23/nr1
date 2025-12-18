@@ -78,7 +78,7 @@
                               <input type="text" pInputText formControlName="responsible" placeholder="Responsavel" class="editable-input" />
                             </td>
                             <td>
-                              <input type="date" formControlName="dueDate" class="date-input" />
+                              <input type="date" formControlName="dueDate" class="date-input" [disabled]="isEmpresaRole" />
                             </td>
                             <td>
                               <p-dropdown

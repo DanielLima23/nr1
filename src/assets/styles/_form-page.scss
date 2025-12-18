@@ -128,7 +128,8 @@
 }
 
 .primary-btn,
-.ghost-btn {
+.ghost-btn,
+.secondary-btn {
   border: none;
   padding: 12px 16px;
   border-radius: 10px;
@@ -139,6 +140,18 @@
   align-items: center;
   gap: 8px;
   transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+}
+
+.secondary-btn {
+  border: 1px solid #cbd5e1;
+  background: linear-gradient(135deg, #e2e8f0, #e5e7eb);
+  color: #0f172a;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.secondary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
 }
 
 .primary-btn {
@@ -172,6 +185,26 @@
   filter: saturate(0.3);
   box-shadow: none;
   transform: none;
+}
+
+.panel-form input,
+.panel-form textarea,
+.plan-form input,
+.plan-form textarea {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.panel-form input:focus,
+.panel-form textarea:focus,
+.plan-form input:focus,
+.plan-form textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  outline: none;
 }
 
 ::ng-deep .p-dropdown {

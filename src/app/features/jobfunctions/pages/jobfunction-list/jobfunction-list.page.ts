@@ -1,4 +1,4 @@
-import { AsyncPipe } from '@angular/common';
+ï»¿import { AsyncPipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -8,17 +8,20 @@ import {
   JobFunction,
 } from '../../services/jobfunction.service';
 import { BaseComponent } from '../../../../shared/components/base-component/base-component';
+import { ActivatedRoute } from '@angular/router';
 import { TopPageComponent } from '../../../../shared/components/top-page/top-page.component';
+import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-jobfunction-list',
   standalone: true,
-  imports: [TopPageComponent, RouterModule, TableModule, ButtonModule, AsyncPipe],
+  imports: [TopPageComponent, RouterModule, TableModule, ButtonModule, AsyncPipe, ConfirmModalComponent],
   templateUrl: './jobfunction-list.page.html',
   styleUrls: ['./jobfunction-list.page.scss'],
 })
 export class JobFunctionListPage extends BaseComponent implements OnInit {
   service = inject(JobFunctionService);
+  private activatedRoute = inject(ActivatedRoute);
 
   companyId!: string;
   sectorId!: string;
@@ -29,9 +32,21 @@ export class JobFunctionListPage extends BaseComponent implements OnInit {
   deletingId: string | number | null = null;
 
   ngOnInit(): void {
-    this.companyId = this.route.snapshot.params['id'];
-    this.sectorId = this.route.snapshot.params['sectorId'];
+    this.companyId = this.getRouteParam('id') ?? '';
+    this.sectorId = this.getRouteParam('sectorId') ?? '';
     this.load();
+  }
+
+  private getRouteParam(key: string): string | null {
+    let current: ActivatedRoute | null = this.activatedRoute;
+    while (current) {
+      const value = current.snapshot?.params?.[key];
+      if (value !== undefined) {
+        return value;
+      }
+      current = current.parent;
+    }
+    return null;
   }
 
   load() {
@@ -43,7 +58,7 @@ export class JobFunctionListPage extends BaseComponent implements OnInit {
       },
       error: () => {
         this.loading.set(false);
-        this.toast.error('Erro ao carregar funções.');
+        this.toast.error('Erro ao carregar funÃ§Ãµes.');
       },
     });
   }
@@ -68,7 +83,7 @@ export class JobFunctionListPage extends BaseComponent implements OnInit {
 
     this.service.deleteById(this.companyId, this.sectorId, idToRemove).subscribe({
       next: () => {
-        this.toast.success('Função removida com sucesso!');
+        this.toast.success('FunÃ§Ã£o removida com sucesso!');
         this.load();
         this.deletingId = null;
         this.selectedId = null;
@@ -76,8 +91,9 @@ export class JobFunctionListPage extends BaseComponent implements OnInit {
       },
       error: () => {
         this.deletingId = null;
-        this.toast.error('Erro ao remover função.');
+        this.toast.error('Erro ao remover funÃ§Ã£o.');
       },
     });
   }
 }
+

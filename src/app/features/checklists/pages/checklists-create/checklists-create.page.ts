@@ -20,6 +20,7 @@ export class ChecklistsCreatePage extends BaseComponent implements OnInit {
 
   checklistId: string | null = this.normalizeId(this.id());
   submitted = false;
+  pageTitle = 'Novo checklist';
 
   form = this.fb.group({
     name: ['', Validators.required],
@@ -33,9 +34,14 @@ export class ChecklistsCreatePage extends BaseComponent implements OnInit {
   ngOnInit(): void {
     if (this.checklistId) {
       this.service.getById(this.checklistId).subscribe({
-        next: (data) => this.form.patchValue(data),
+        next: (data) => {
+          this.form.patchValue(data);
+          this.pageTitle = `Editar checklist ${data?.name ?? ''}`.trim();
+        },
         error: () => this.toast.error('Erro ao carregar checklist.'),
       });
+    } else {
+      this.pageTitle = 'Novo checklist';
     }
   }
 

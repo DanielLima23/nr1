@@ -13,7 +13,7 @@ export const permissionGuard: CanActivateFn = (route, state) => {
   }
 
   const authData = auth.authData;
-  const userRole = authData?.user?.role;
+  const userRole = authData?.user?.role?.toString?.().toLowerCase();
 
   if (!userRole) {
     router.navigate(['/admin/forbidden']);
@@ -29,7 +29,8 @@ export const permissionGuard: CanActivateFn = (route, state) => {
   }
 
   // Verifica se usuário possui a role
-  const allowed = requiredRoles.includes(userRole);
+  const normalizedRequired = (requiredRoles || []).map((r) => r?.toString?.().toLowerCase());
+  const allowed = normalizedRequired.includes(userRole);
 
   if (!allowed) {
     router.navigate(['/admin/forbidden']);

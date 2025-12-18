@@ -2,11 +2,12 @@
 <nav class="sidenav">
 
   <div class="sidenav-header">
-    <span class="title">App Base</span>
+    <span class="title">NR1</span>
   </div>
 
   <ul class="sidenav-list">
     @for (item of items; track item.label) {
+      @if (hasAccess(item)) {
       <li
         class="sidenav-item"
         [class.is-active]="isItemActive(item)"
@@ -36,21 +37,23 @@
 
           <ul class="sidenav-sublist">
             @for (child of item.children; track child.label) {
-              <li
-                class="sidenav-subitem"
-                [class.is-active]="isItemActive(child)"
-              >
-                <a
-                  class="sidenav-link sidenav-link-child"
-                  [routerLink]="child.route"
+              @if (hasAccess(child)) {
+                <li
+                  class="sidenav-subitem"
+                  [class.is-active]="isItemActive(child)"
                 >
-                  @if (child.icon) {
-                    <i class="pi {{ child.icon }} icon"></i>
-                  }
+                  <a
+                    class="sidenav-link sidenav-link-child"
+                    [routerLink]="child.route"
+                  >
+                    @if (child.icon) {
+                      <i class="pi {{ child.icon }} icon"></i>
+                    }
 
-                  <span class="label">{{ child.label }}</span>
-                </a>
-              </li>
+                    <span class="label">{{ child.label }}</span>
+                  </a>
+                </li>
+              }
             }
           </ul>
         }
@@ -66,6 +69,7 @@
           </a>
         }
       </li>
+    }
     }
   </ul>
 

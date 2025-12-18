@@ -23,6 +23,7 @@ export class ActionsCreatePage extends BaseComponent implements OnInit {
     ? ['/admin/riscos', this.riskId, 'acoes']
     : '/admin/riscos';
   submitted = false;
+  pageTitle = 'Novo plano de acao';
 
   form = this.fb.group({
     title: ['', Validators.required],
@@ -45,9 +46,12 @@ export class ActionsCreatePage extends BaseComponent implements OnInit {
             ...rest,
             dueDate: dueDate ? dueDate.substring(0, 10) : '',
           });
+          this.pageTitle = `Editar plano ${plan?.title ?? ''}`.trim();
         },
         error: () => this.toast.error('Erro ao carregar plano de acao.'),
       });
+    } else {
+      this.pageTitle = 'Novo plano de acao';
     }
   }
 

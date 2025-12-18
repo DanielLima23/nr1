@@ -1,5 +1,5 @@
-﻿<app-top-page
-  [title]="patientId ? 'Editar Paciente' : 'Novo Paciente'"
+<app-top-page
+  [title]="pageTitle"
   icon="pi pi-id-card"
   [showBack]="true"
   [backLink]="['/admin/pacientes']">
@@ -57,7 +57,7 @@
 
       <div class="field">
         <label for="name">Nome *</label>
-        <input id="name" type="text" formControlName="name" placeholder="Nome do paciente" />
+        <input id="name" type="text" formControlName="name" placeholder="Nome do trabalhador(a)" />
         @if (isInvalid('name')) {
         <small class="error-msg">Informe o nome.</small>
         }
@@ -91,3 +91,7 @@
     </form>
   </div>
 </section>
+
+
+
+

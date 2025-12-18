@@ -1,4 +1,4 @@
-// side-nav.component.ts
+Ôªø// side-nav.component.ts
 import { Component, Input, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
@@ -8,7 +8,7 @@ import { ConfirmModalComponent } from '../../../shared/components/confirm-modal/
 export interface SideNavItem {
   label: string;
   icon?: string;
-  route?: string; // opcional para itens que s„o sÛ grupo
+  route?: string; // opcional para itens que s√£o s√≥ grupo
   children?: SideNavItem[];
   requiredPermissions?: string[];
   requiredRoles?: string[];
@@ -27,7 +27,7 @@ export class SideNavComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
 
-  // controla quais grupos est„o expandidos
+  // controla quais grupos est√£o expandidos
   expandedMap = new Map<string, boolean>();
   showLogoutConfirm = false;
 
@@ -69,7 +69,7 @@ export class SideNavComponent {
     return false;
   }
 
-  // usado para saber se o grupo est· expandido
+  // usado para saber se o grupo est√° expandido
   isExpanded(item: SideNavItem): boolean {
     if (!item.children?.length) {
       return false;
@@ -81,7 +81,7 @@ export class SideNavComponent {
       return manual;
     }
 
-    // se algum filho estiver ativo, mantÈm aberto
+    // se algum filho estiver ativo, mant√©m aberto
     return this.isItemActive(item);
   }
 
@@ -89,4 +89,20 @@ export class SideNavComponent {
     // pode ajustar depois se quiser chavear por id
     return item.route || item.label;
   }
+
+  hasAccess(item: SideNavItem): boolean {
+    const userRole = (this.auth.role || '').toLowerCase();
+    if (!userRole) return false;
+
+    if (item.requiredRoles?.length) {
+      return item.requiredRoles.map((r) => r.toLowerCase()).includes(userRole);
+    }
+
+    if (item.children?.length) {
+      return item.children.some((child) => this.hasAccess(child));
+    }
+
+    return true;
+  }
 }
+

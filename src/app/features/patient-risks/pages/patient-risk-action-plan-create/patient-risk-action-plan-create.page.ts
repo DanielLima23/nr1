@@ -26,6 +26,7 @@ export class PatientRiskActionPlanCreatePage extends BaseComponent implements On
   submitted = false;
   backQueryParams = this.companyId ? { companyId: this.companyId } : null;
   backLink = ['/admin/pacientes', this.patientId, 'riscos', this.riskId, 'planos'];
+  pageTitle = 'Nova medida mitigadora';
 
   form = this.fb.group({
     title: ['', Validators.required],
@@ -38,6 +39,8 @@ export class PatientRiskActionPlanCreatePage extends BaseComponent implements On
   ngOnInit(): void {
     if (this.actionPlanId) {
       this.loadPlan();
+    } else {
+      this.pageTitle = 'Nova medida mitigadora';
     }
   }
 
@@ -50,6 +53,7 @@ export class PatientRiskActionPlanCreatePage extends BaseComponent implements On
             ...rest,
             dueDate: dueDate ? dueDate.substring(0, 10) : '',
           });
+          this.pageTitle = `Editar medida mitigadora ${plan?.title ?? ''}`.trim();
         },
       error: () => this.toast.error('Erro ao carregar medida mitigadora.'),
     });

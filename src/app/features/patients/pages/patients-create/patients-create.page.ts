@@ -34,6 +34,7 @@ export class PatientsCreatePage extends BaseComponent implements OnInit {
 
   patientId = this.id();
   companyIdParam = this.route.snapshot.queryParamMap.get('companyId');
+  pageTitle = 'Novo trabalhador(a)';
 
   companies: Company[] = [];
   sectors: Sector[] = [];
@@ -63,6 +64,8 @@ export class PatientsCreatePage extends BaseComponent implements OnInit {
 
     if (this.patientId && companyId) {
       this.loadPatient(companyId);
+    } else {
+      this.pageTitle = 'Novo trabalhador(a)';
     }
   }
 
@@ -85,8 +88,9 @@ export class PatientsCreatePage extends BaseComponent implements OnInit {
         if (patient.companyId && patient.sectorId) {
           this.onSectorChange(patient.companyId, patient.sectorId, false);
         }
+        this.pageTitle = `Editar trabalhador(a) ${patient?.name ?? ''}`.trim();
       },
-      error: () => this.toast.error('Erro ao carregar paciente.'),
+      error: () => this.toast.error('Erro ao carregar trabalhador(a).'),
     });
   }
 

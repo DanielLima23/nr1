@@ -8,6 +8,8 @@ import { BaseComponent } from '../../../../shared/components/base-component/base
 import { TopPageComponent } from '../../../../shared/components/top-page/top-page.component';
 import { RiskService, Risk } from '../../services/risk.service';
 import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal.component';
+import { PERMISSIONS } from '../../../../shared/classes/tipo-permissaso';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-risks-list',
@@ -26,11 +28,13 @@ import { ConfirmModalComponent } from '../../../../shared/components/confirm-mod
 })
 export class RisksListPage extends BaseComponent implements OnInit {
   service = inject(RiskService);
+  private auth = inject(AuthService);
   risks$ = this.service.risks$;
   showConfirmModal = false;
   selectedId: string | null = null;
   selectedTitle = '';
   deletingId: string | null = null;
+  readonly isMedico = (this.auth.role || '').toLowerCase() === PERMISSIONS.MEDICO.toLowerCase();
   confirmLoading = false;
 
   constructor() {
@@ -77,8 +81,7 @@ export class RisksListPage extends BaseComponent implements OnInit {
       next: () => {
         this.toast.success('Risco removido com sucesso!');
         this.deletingId = null;
-        this.selectedId = null;
-        this.selectedTitle = '';
+        this.closeDeleteConfirm();
       },
       error: () => {
         this.deletingId = null;

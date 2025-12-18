@@ -30,7 +30,8 @@ export const appRoutes: Routes = [
       // DASHBOARD PRIVADO
       {
         path: 'dashboard',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { roles: [PERMISSIONS.ADMINISTRADOR, PERMISSIONS.MEDICO, PERMISSIONS.ENGENHEIRO] },
         component: DashboardHomePage,
       },
 
@@ -44,7 +45,8 @@ export const appRoutes: Routes = [
       },
       {
         path: 'empresa',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { roles: [PERMISSIONS.ADMINISTRADOR, PERMISSIONS.ENGENHEIRO] },
         loadChildren: () =>
           import('./features/empresa/empresa.routes').then(
             (m) => m.EMPRESA_ROUTES
@@ -52,7 +54,8 @@ export const appRoutes: Routes = [
       },
       {
         path: 'riscos',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { roles: [PERMISSIONS.ADMINISTRADOR, PERMISSIONS.ENGENHEIRO] },
         loadChildren: () =>
           import('./features/risks/risks.routes').then(
             (m) => m.RISKS_ROUTES
@@ -60,7 +63,8 @@ export const appRoutes: Routes = [
       },
       {
         path: 'pacientes',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { roles: [PERMISSIONS.ADMINISTRADOR, PERMISSIONS.MEDICO, PERMISSIONS.ENGENHEIRO] },
         loadChildren: () =>
           import('./features/patients/patients.routes').then(
             (m) => m.PATIENTS_ROUTES
@@ -68,7 +72,14 @@ export const appRoutes: Routes = [
       },
       {
         path: 'medidas-metigadoras-empresa',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: {
+          roles: [
+            PERMISSIONS.ADMINISTRADOR,
+            PERMISSIONS.ENGENHEIRO,
+            PERMISSIONS.EMPRESA,
+          ],
+        },
         loadChildren: () =>
           import('./features/company-action-plans/company-action-plans.routes').then(
             (m) => m.COMPANY_ACTION_PLANS_ROUTES
@@ -76,7 +87,8 @@ export const appRoutes: Routes = [
       },
       {
         path: 'checklists',
-        canActivate: [authGuard],
+        canActivate: [authGuard, permissionGuard],
+        data: { roles: [PERMISSIONS.ADMINISTRADOR, PERMISSIONS.ENGENHEIRO] },
         loadChildren: () =>
           import('./features/checklists/checklists.routes').then(
             (m) => m.CHECKLISTS_ROUTES

@@ -6,7 +6,8 @@ import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { TopPageComponent } from '../../../../shared/components/top-page/top-page.component';
 import { BaseComponent } from '../../../../shared/components/base-component/base-component';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgClass } from '@angular/common';
+import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-users-list',
@@ -19,7 +20,9 @@ import { AsyncPipe } from '@angular/common';
     TableModule,
     ButtonModule,
     TooltipModule,
-    AsyncPipe
+    AsyncPipe,
+    ConfirmModalComponent,
+    NgClass
   ],
 })
 export class UsersListPage extends BaseComponent implements OnInit {
@@ -50,6 +53,15 @@ export class UsersListPage extends BaseComponent implements OnInit {
         return acc;
       }, {});
     });
+  }
+
+  getProfileClass(profileId: string | number): string {
+    const name = (this.profilesMap[profileId] || '').toString().toLowerCase();
+    if (name.includes('admin')) return 'profile-admin';
+    if (name.includes('med')) return 'profile-medico';
+    if (name.includes('eng')) return 'profile-engenheiro';
+    if (name.includes('emp')) return 'profile-empresa';
+    return 'profile-default';
   }
 
   private load() {

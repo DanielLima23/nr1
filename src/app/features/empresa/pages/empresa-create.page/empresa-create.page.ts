@@ -31,6 +31,7 @@ export class EmpresaCreatePage extends BaseComponent implements OnInit {
   service = inject(EmpresaService);
   companyId = this.id();
   submitted = false;
+  pageTitle = 'Nova empresa';
 
   form = this.fb.group({
     name: ['', Validators.required],
@@ -50,7 +51,10 @@ export class EmpresaCreatePage extends BaseComponent implements OnInit {
       this.service.getById(this.companyId).subscribe((company) => {
         this.form.patchValue(company);
         this.formatExistingPhone();
+        this.pageTitle = `Editar empresa ${company?.name ?? ''}`.trim();
       });
+    } else {
+      this.pageTitle = 'Nova empresa';
     }
 
     this.form

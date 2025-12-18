@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { SectorService, Sector } from '../../services/sector.service';
 import { BaseComponent } from '../../../../shared/components/base-component/base-component';
+import { ActivatedRoute } from '@angular/router';
 import { TopPageComponent } from '../../../../shared/components/top-page/top-page.component';
 
 @Component({
@@ -17,10 +18,12 @@ import { TopPageComponent } from '../../../../shared/components/top-page/top-pag
 export class SectorCreatePage extends BaseComponent implements OnInit {
   fb = inject(FormBuilder);
   service = inject(SectorService);
+  private activatedRoute = inject(ActivatedRoute);
 
   companyId!: string;
   sectorId?: string;
   submitted = false;
+  pageTitle = 'Novo setor';
 
   form = this.fb.group({
     name: ['', Validators.required],
@@ -28,14 +31,29 @@ export class SectorCreatePage extends BaseComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.companyId = this.route.snapshot.params['id'];
-    this.sectorId = this.route.snapshot.params['sectorId'];
+    this.companyId = this.getRouteParam('id') ?? '';
+    this.sectorId = this.getRouteParam('sectorId') ?? undefined;
 
     if (this.sectorId) {
       this.service.getById(this.companyId, this.sectorId).subscribe((sector) => {
         this.form.patchValue(sector);
+        this.pageTitle = `Editar setor ${sector?.name ?? ''}`.trim();
       });
+    } else {
+      this.pageTitle = 'Novo setor';
     }
+  }
+
+  private getRouteParam(key: string): string | null {
+    let current: ActivatedRoute | null = this.activatedRoute;
+    while (current) {
+      const value = current.snapshot?.params?.[key];
+      if (value !== undefined) {
+        return value;
+      }
+      current = current.parent;
+    }
+    return null;
   }
 
   isInvalid(field: string): boolean {

@@ -1,7 +1,7 @@
 <app-top-page
   title="Riscos"
   icon="pi pi-exclamation-triangle"
-  [showAdd]="true"
+  [showAdd]="!isMedico"
   addLabel="Novo"
   [addLink]="'/admin/riscos/criar'">
 </app-top-page>
@@ -12,7 +12,7 @@
       <div>
         <p class="eyebrow">Registros</p>
         <h3>Riscos</h3>
-        <p class="subtitle">Gerencie e acesse medidas mitigadoras rapidamente.</p>
+        <p class="subtitle">Gerencie e Acoesse medidas mitigadoras rapidamente.</p>
       </div>
     </div>
 
@@ -28,21 +28,15 @@
 
           <ng-template pTemplate="header">
             <tr>
-              <th>TÇðtulo</th>
-              <th>Probabilidade</th>
-              <th>Impacto</th>
-              <th>Score</th>
+              <th>Titulo</th>
               <th>Ativo</th>
-              <th class="align-right">AÇõÇæes</th>
+              <th class="align-right">Ações</th>
             </tr>
           </ng-template>
 
           <ng-template pTemplate="body" let-row>
             <tr>
               <td>{{ row.title }}</td>
-              <td>{{ row.probability }}</td>
-              <td>{{ row.impact }}</td>
-              <td>{{ row.score }}</td>
               <td>
                 <span
                   class="status-chip"
@@ -63,7 +57,7 @@
                   pButton
                   icon="pi pi-pencil"
                   class="p-button-text action-btn"
-                  [routerLink]="['/admin/riscos', 'editar', row.id]"
+                  [routerLink]="['/admin/riscos', 'editar', row.id]" [disabled]="isMedico"
                   pTooltip="Editar risco" tooltipPosition="top" appendTo="body">
                 </button>
                 <button
@@ -71,7 +65,7 @@
                   icon="pi pi-trash"
                   class="p-button-text p-button-danger action-btn"
                   (click)="openDeleteConfirm(row)"
-                  [disabled]="deletingId === row.id"
+                  [disabled]="deletingId === row.id || isMedico"
                   pTooltip="Remover risco" tooltipPosition="top" appendTo="body">
                 </button>
               </td>
@@ -109,3 +103,13 @@
   (confirm)="confirmDelete()"
   (cancel)="closeDeleteConfirm()">
 </app-confirm-modal>
+
+
+
+
+
+
+
+
+
+

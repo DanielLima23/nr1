@@ -19,6 +19,7 @@ export class RisksCreatePage extends BaseComponent implements OnInit {
   private service = inject(RiskService);
   riskId: string | null = this.normalizeId(this.id());
   submitted = false;
+  pageTitle = 'Novo risco';
 
   form = this.fb.group({
     title: ['', Validators.required],
@@ -36,9 +37,14 @@ export class RisksCreatePage extends BaseComponent implements OnInit {
   ngOnInit(): void {
     if (this.riskId) {
       this.service.getById(this.riskId).subscribe({
-        next: (risk) => this.form.patchValue(risk),
+        next: (risk) => {
+          this.form.patchValue(risk);
+          this.pageTitle = `Editar risco ${risk?.title ?? ''}`.trim();
+        },
         error: () => this.toast.error('Erro ao carregar risco.'),
       });
+    } else {
+      this.pageTitle = 'Novo risco';
     }
   }
 

@@ -1,8 +1,7 @@
-﻿<app-top-page
-  title="Setores"
+<app-top-page
+  [title]="pageTitle"
   icon="pi pi-sitemap"
-  [showBack]="true"
-  [backLink]="['/admin/empresa', companyId, 'setores']">
+  [showBack]="true">
 </app-top-page>
 
 <section class="page-shell">
@@ -22,7 +21,7 @@
       </div>
 
       <div class="form-actions">
-        <button type="button" class="ghost-btn" [routerLink]="['/admin/empresa', companyId, 'setores']">
+        <button type="button" class="ghost-btn" (click)="back()">
           Cancelar
         </button>
         <button type="submit" class="primary-btn">
@@ -33,3 +32,5 @@
     </form>
   </div>
 </section>
+
+

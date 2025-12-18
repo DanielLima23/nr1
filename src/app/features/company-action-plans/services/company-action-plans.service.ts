@@ -22,11 +22,10 @@ export interface CompanyActionPlan {
 }
 
 export interface CompanyActionPlanUpdatePayload {
-  title?: string | null;
-  description?: string | null;
   dueDate?: string | null;
   responsible?: string | null;
   status?: number | null;
+  completed?: boolean | null;
 }
 
 @Injectable({ providedIn: 'root' })

@@ -5,6 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { SectorService, Sector } from '../../services/sector.service';
 import { BaseComponent } from '../../../../shared/components/base-component/base-component';
+import { ActivatedRoute } from '@angular/router';
 import { TopPageComponent } from '../../../../shared/components/top-page/top-page.component';
 import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal.component';
 
@@ -17,6 +18,7 @@ import { ConfirmModalComponent } from '../../../../shared/components/confirm-mod
 })
 export class SectorListPage extends BaseComponent implements OnInit {
   service = inject(SectorService);
+  private activatedRoute = inject(ActivatedRoute);
 
   companyId!: string;
   sectors: Sector[] = [];
@@ -26,8 +28,20 @@ export class SectorListPage extends BaseComponent implements OnInit {
   deletingId: string | number | null = null;
 
   ngOnInit(): void {
-    this.companyId = this.route.snapshot.params['id'];
+    this.companyId = this.getRouteParam('id') ?? '';
     this.load();
+  }
+
+  private getRouteParam(key: string): string | null {
+    let current: ActivatedRoute | null = this.activatedRoute;
+    while (current) {
+      const value = current.snapshot?.params?.[key];
+      if (value !== undefined) {
+        return value;
+      }
+      current = current.parent;
+    }
+    return null;
   }
 
   load() {

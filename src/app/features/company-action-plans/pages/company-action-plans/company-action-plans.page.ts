@@ -10,6 +10,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { TopPageComponent } from '../../../../shared/components/top-page/top-page.component';
 import { BaseComponent } from '../../../../shared/components/base-component/base-component';
+import { PERMISSIONS } from '../../../../shared/classes/tipo-permissaso';
+import { AuthService } from '../../../../core/services/auth.service';
 import { EmpresaService } from '../../../empresa/services/empresa.service';
 import { Sector, SectorService } from '../../../sectors/services/sector.service';
 import {
@@ -55,9 +57,11 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
   private companyService = inject(EmpresaService);
   private sectorService = inject(SectorService);
   private plansService = inject(CompanyActionPlansService);
+  private authService = inject(AuthService);
 
   companies: CompanyGroup[] = [];
   savingPlanId: string | null = null;
+  readonly isEmpresaRole = this.authService.role === PERMISSIONS.EMPRESA;
 
   private planCache = new Map<string, CompanyActionPlan>();
   private forms = new Map<string, FormGroup>();
@@ -158,9 +162,11 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
     const value = form.value;
     const dueDateValue = value.dueDate;
     const statusValue = value.status;
+    const statusNumeric =
+      statusValue === '' || statusValue === undefined || statusValue === null
+        ? Number(cached.status ?? 1)
+        : Number(statusValue);
     const payload: CompanyActionPlanUpdatePayload = {
-      title: this.cleanText(value.title ?? cached.title),
-      description: this.cleanText(value.description ?? cached.description),
       responsible: this.cleanText(value.responsible ?? cached.responsible),
       dueDate:
         dueDateValue === ''
@@ -168,10 +174,8 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
           : dueDateValue
             ? new Date(dueDateValue).toISOString()
             : cached.dueDate || null,
-      status:
-        statusValue === '' || statusValue === undefined || statusValue === null
-          ? cached.status ?? null
-          : Number(statusValue),
+      status: statusNumeric,
+      completed: statusNumeric === 3,
     };
 
     this.savingPlanId = planId.toString();
@@ -187,13 +191,13 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
       '';
 
     if (!companyId) {
-      this.toast.error('Empresa não identificada para esta medida.');
+      this.toast.error('Empresa nǜo identificada para esta medida.');
       this.savingPlanId = null;
       return;
     }
 
     if (!sectorId) {
-      this.toast.error('Setor não identificado para esta medida.');
+      this.toast.error('Setor nǜo identificado para esta medida.');
       this.savingPlanId = null;
       return;
     }
@@ -372,3 +376,4 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
     });
   }
 }
+
