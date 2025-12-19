@@ -1,6 +1,6 @@
 services:
   nr1-web:
-    build: .
+    image: nr1-web:latest
     ports:
       - "8080:80"
     container_name: nr1-web-app

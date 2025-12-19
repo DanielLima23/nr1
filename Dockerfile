@@ -19,11 +19,11 @@ RUN npm run build
 # Estágio 2: Servidor web
 FROM nginx:alpine
 
-# Remove arquivos desnecessários do nginx
-RUN rm -rf /usr/share/nginx/html/*
+# Remove arquivos desnecessários do nginx e configuração padrão
+RUN rm -rf /usr/share/nginx/html/* && rm -f /etc/nginx/conf.d/default.conf
 
 # Copia os arquivos buildados para o nginx
-COPY --from=build /app/dist/nr1-web /usr/share/nginx/html
+COPY --from=build /app/dist/nr1-web/browser /usr/share/nginx/html
 
 # Copia configuração customizada do nginx
 COPY nginx.conf /etc/nginx/nginx.conf
