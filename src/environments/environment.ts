@@ -1,4 +1,4 @@
 export const environment = {
-  apiUrl: 'http://localhost:8055/',
+  apiUrl: '/api/',
   useMockAuth: false,
 };
