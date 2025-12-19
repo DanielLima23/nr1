@@ -1,6 +1,9 @@
 services:
   nr1-web:
-    image: nr1-web:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nr1-web:local
     ports:
       - "8080:80"
     container_name: nr1-web-app
