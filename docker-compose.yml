@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   nr1-web:
     build: .
@@ -7,7 +5,9 @@ services:
       - "8080:80"
     container_name: nr1-web-app
     restart: unless-stopped
+    networks:
+      - projectbase_default
 
 networks:
-  app-net:
+  projectbase_default:
     external: true

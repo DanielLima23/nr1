@@ -10,3 +10,9 @@ coverage
 dist
 .vscode
 *.md
+Dockerfile*
+docker-compose*
+.editorconfig
+tsconfig.spec.json
+karma.conf.js
+.browserslistrc
