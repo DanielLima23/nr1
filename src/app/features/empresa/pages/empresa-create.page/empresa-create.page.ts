@@ -40,6 +40,7 @@ export class EmpresaCreatePage extends BaseComponent implements OnInit {
     phone: ['', Validators.required],
     address: ['', Validators.required],
     observations: [''],
+    generatedPassword: ['']
   });
 
   constructor() {
