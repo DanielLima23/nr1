@@ -31,6 +31,18 @@ export class EmpresaService extends BaseCrudService {
     );
   }
 
+  loadCompanyById(id: any): Observable<Company> {
+    return this.getById(id).pipe(
+      tap((company) => {
+        this.companiesSubject.next(company ? [company] : []);
+      })
+    );
+  }
+
+  setCompanies(list: Company[]) {
+    this.companiesSubject.next(list || []);
+  }
+
   getById(id: any): Observable<Company> {
     return this.get<Company>(`companies/${id}`);
   }

@@ -195,4 +195,14 @@ export class DashboardService extends BaseCrudService {
 
     return false;
   }
+
+  downloadSectorActionPlansReport(
+    companyId: string,
+    format: 'pdf' | 'text'
+  ) {
+    return this.http.get(
+      `${this.baseUrl}companies/${companyId}/reports/sector-action-plans/${format}`,
+      { responseType: 'blob' }
+    );
+  }
 }
