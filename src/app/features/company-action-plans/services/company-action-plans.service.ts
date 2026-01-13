@@ -54,6 +54,13 @@ export class CompanyActionPlansService extends BaseCrudService {
     );
   }
 
+  downloadSectorActionPlansReport(companyId: string, format: 'pdf' | 'text') {
+    return this.http.get(
+      `${this.baseUrl}companies/${companyId}/reports/sector-action-plans/${format}`,
+      { responseType: 'blob' }
+    );
+  }
+
   private normalizePlans(data: any): CompanyActionPlan[] {
     if (Array.isArray(data)) return data;
     if (Array.isArray(data?.items)) return data.items;

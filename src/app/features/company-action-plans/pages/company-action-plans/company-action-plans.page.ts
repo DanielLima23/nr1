@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
+import { TooltipModule } from 'primeng/tooltip';
 import { TopPageComponent } from '../../../../shared/components/top-page/top-page.component';
 import { BaseComponent } from '../../../../shared/components/base-component/base-component';
 import { PERMISSIONS } from '../../../../shared/classes/tipo-permissaso';
@@ -49,6 +50,7 @@ interface CompanyGroup {
     ButtonModule,
     InputTextModule,
     DialogModule,
+    TooltipModule,
     TopPageComponent,
   ],
 })
@@ -62,6 +64,8 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
   companies: CompanyGroup[] = [];
   savingPlanId: string | null = null;
   readonly isEmpresaRole = this.authService.role === PERMISSIONS.EMPRESA;
+  showReportMenu = false;
+  isDownloadingReport = false;
 
   private planCache = new Map<string, CompanyActionPlan>();
   private forms = new Map<string, FormGroup>();
@@ -125,6 +129,30 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
   private isCompleted(status: any): boolean {
     const num = Number(status);
     return num === 3;
+  }
+
+  toggleReportMenu() {
+    this.showReportMenu = !this.showReportMenu;
+  }
+
+  downloadReport(format: 'pdf' | 'text') {
+    const companyId = this.resolveReportCompanyId();
+    if (!companyId || this.isDownloadingReport) {
+      return;
+    }
+
+    this.isDownloadingReport = true;
+    this.plansService.downloadSectorActionPlansReport(companyId, format).subscribe({
+      next: (blob: Blob) => {
+        this.isDownloadingReport = false;
+        this.showReportMenu = false;
+        this.triggerDownload(blob, format, companyId);
+      },
+      error: () => {
+        this.isDownloadingReport = false;
+        this.toast.error('Erro ao gerar relatorio.');
+      },
+    });
   }
 
   resetPlanForm(planId: string | number) {
@@ -374,6 +402,42 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
       this.planCache.delete(id);
       this.forms.delete(id);
     });
+  }
+
+  private resolveReportCompanyId(): string | null {
+    const user = this.authService.authData?.user;
+    const rawId =
+      user?.companyId ??
+      user?.company_id ??
+      user?.empresaId ??
+      user?.empresa_id ??
+      user?.company?.id ??
+      user?.company?.companyId;
+    const normalized = rawId?.toString?.() ?? rawId;
+    if (normalized) return normalized;
+
+    const fallbackId = this.companies?.[0]?.company?.id;
+    if (fallbackId) {
+      if ((this.companies || []).length > 1) {
+        this.toast.warn('Mais de uma empresa encontrada. Usando a primeira.');
+      }
+      return fallbackId?.toString?.() ?? fallbackId;
+    }
+
+    this.toast.warn('Nenhuma empresa encontrada para gerar o relatorio.');
+    return null;
+  }
+
+  private triggerDownload(blob: Blob, format: 'pdf' | 'text', companyId: string) {
+    const ext = format === 'pdf' ? 'pdf' : 'txt';
+    const date = new Date().toISOString().slice(0, 10);
+    const filename = `relatorio-setorial-${companyId}-${date}.${ext}`;
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    window.URL.revokeObjectURL(url);
   }
 }
 

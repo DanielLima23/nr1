@@ -161,6 +161,41 @@
   }
 </section>
 
+<div class="report-fab-shell">
+  <div class="report-menu" [class.open]="showReportMenu">
+    <button
+      pButton
+      type="button"
+      class="report-option p-button-rounded p-button-text"
+      icon="pi pi-file-pdf"
+      [disabled]="isDownloadingReport"
+      pTooltip="Baixar PDF"
+      tooltipPosition="left"
+      appendTo="body"
+      (click)="downloadReport('pdf')">
+    </button>
+    <button
+      pButton
+      type="button"
+      class="report-option p-button-rounded p-button-text"
+      icon="pi pi-file"
+      [disabled]="isDownloadingReport"
+      pTooltip="Baixar TXT"
+      tooltipPosition="left"
+      appendTo="body"
+      (click)="downloadReport('text')">
+    </button>
+  </div>
+  <button
+    pButton
+    type="button"
+    class="report-fab p-button-rounded"
+    icon="pi pi-print"
+    [disabled]="isDownloadingReport"
+    (click)="toggleReportMenu()">
+  </button>
+</div>
+
 <p-dialog
   header="Detalhes da medida mitigadora"
   [(visible)]="detailVisible"
