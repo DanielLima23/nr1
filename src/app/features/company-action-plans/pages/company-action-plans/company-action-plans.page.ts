@@ -32,6 +32,7 @@ interface CompanyGroup {
   sectors: Sector[];
   groups: SectorGroup[];
   loading: boolean;
+  showReportMenu?: boolean;
 }
 
 @Component({
@@ -64,7 +65,6 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
   companies: CompanyGroup[] = [];
   savingPlanId: string | null = null;
   readonly isEmpresaRole = this.authService.role === PERMISSIONS.EMPRESA;
-  showReportMenu = false;
   isDownloadingReport = false;
 
   private planCache = new Map<string, CompanyActionPlan>();
@@ -131,22 +131,31 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
     return num === 3;
   }
 
-  toggleReportMenu() {
-    this.showReportMenu = !this.showReportMenu;
+  toggleReportMenuForCompany(cg: CompanyGroup) {
+    cg.showReportMenu = !cg.showReportMenu;
   }
 
-  downloadReport(format: 'pdf' | 'text') {
-    const companyId = this.resolveReportCompanyId();
-    if (!companyId || this.isDownloadingReport) {
+  downloadReportForCompany(companyId: string | number | undefined, format: 'pdf' | 'text') {
+    const id = companyId?.toString();
+    if (!id || this.isDownloadingReport) {
+      this.toast.warn('ID da empresa nao identificado.');
       return;
     }
 
     this.isDownloadingReport = true;
-    this.plansService.downloadSectorActionPlansReport(companyId, format).subscribe({
+    
+    // Fecha o menu da empresa
+    const company = this.companies.find(
+      (cg) => (cg.company?.id?.toString?.() || cg.company?.id) === id
+    );
+    if (company) {
+      company.showReportMenu = false;
+    }
+
+    this.plansService.downloadSectorActionPlansReport(id, format).subscribe({
       next: (blob: Blob) => {
         this.isDownloadingReport = false;
-        this.showReportMenu = false;
-        this.triggerDownload(blob, format, companyId);
+        this.triggerDownload(blob, format, id);
       },
       error: () => {
         this.isDownloadingReport = false;
@@ -251,6 +260,7 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
           sectors: [],
           groups: [],
           loading: true,
+          showReportMenu: false,
         }));
 
         this.companies.forEach((cg) => {

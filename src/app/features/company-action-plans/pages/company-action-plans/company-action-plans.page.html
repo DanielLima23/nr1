@@ -20,6 +20,43 @@
               <span class="company-name">{{ cg.company?.name || 'Empresa' }}</span>
               <span class="info-pill">Setores: {{ cg.sectors.length || 0 }}</span>
               <span class="info-pill">Medidas ({{ countCompleted(cg) }}/{{ totalPlans(cg) }})</span>
+              <div class="company-actions">
+                <div class="report-menu-inline" [class.open]="cg.showReportMenu">
+                  <button
+                    pButton
+                    type="button"
+                    class="report-option p-button-rounded p-button-text p-button-sm"
+                    icon="pi pi-file-pdf"
+                    [disabled]="isDownloadingReport"
+                    pTooltip="Baixar PDF"
+                    tooltipPosition="left"
+                    appendTo="body"
+                    (click)="downloadReportForCompany(cg.company?.id, 'pdf')">
+                  </button>
+                  <button
+                    pButton
+                    type="button"
+                    class="report-option p-button-rounded p-button-text p-button-sm"
+                    icon="pi pi-file"
+                    [disabled]="isDownloadingReport"
+                    pTooltip="Baixar TXT"
+                    tooltipPosition="left"
+                    appendTo="body"
+                    (click)="downloadReportForCompany(cg.company?.id, 'text')">
+                  </button>
+                </div>
+                <button
+                  pButton
+                  type="button"
+                  class="p-button-rounded p-button-text p-button-sm"
+                  icon="pi pi-print"
+                  [disabled]="isDownloadingReport"
+                  pTooltip="Imprimir relatorio"
+                  tooltipPosition="left"
+                  appendTo="body"
+                  (click)="toggleReportMenuForCompany(cg)">
+                </button>
+              </div>
             </div>
           </ng-template>
 
@@ -160,41 +197,6 @@
     </p-accordion>
   }
 </section>
-
-<div class="report-fab-shell">
-  <div class="report-menu" [class.open]="showReportMenu">
-    <button
-      pButton
-      type="button"
-      class="report-option p-button-rounded p-button-text"
-      icon="pi pi-file-pdf"
-      [disabled]="isDownloadingReport"
-      pTooltip="Baixar PDF"
-      tooltipPosition="left"
-      appendTo="body"
-      (click)="downloadReport('pdf')">
-    </button>
-    <button
-      pButton
-      type="button"
-      class="report-option p-button-rounded p-button-text"
-      icon="pi pi-file"
-      [disabled]="isDownloadingReport"
-      pTooltip="Baixar TXT"
-      tooltipPosition="left"
-      appendTo="body"
-      (click)="downloadReport('text')">
-    </button>
-  </div>
-  <button
-    pButton
-    type="button"
-    class="report-fab p-button-rounded"
-    icon="pi pi-print"
-    [disabled]="isDownloadingReport"
-    (click)="toggleReportMenu()">
-  </button>
-</div>
 
 <p-dialog
   header="Detalhes da medida mitigadora"
