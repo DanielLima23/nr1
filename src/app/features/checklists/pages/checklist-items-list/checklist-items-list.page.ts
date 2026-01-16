@@ -56,7 +56,7 @@ export class ChecklistItemsListPage extends BaseComponent implements OnInit {
       },
       error: () => {
         this.loading.set(false);
-        this.toast.error('Erro ao carregar itens.');
+        this.toast.error('Erro ao carregar perguntas.');
       },
     });
   }
@@ -82,7 +82,7 @@ export class ChecklistItemsListPage extends BaseComponent implements OnInit {
 
     this.service.deleteById(this.checklistId, idToRemove).subscribe({
       next: () => {
-        this.toast.success('Item removido com sucesso!');
+        this.toast.success('Pergunta removida com sucesso!');
         this.load();
         this.deletingId = null;
         this.selectedId = null;
@@ -90,7 +90,7 @@ export class ChecklistItemsListPage extends BaseComponent implements OnInit {
       },
       error: () => {
         this.deletingId = null;
-        this.toast.error('Erro ao remover item.');
+        this.toast.error('Erro ao remover pergunta.');
       },
     });
   }

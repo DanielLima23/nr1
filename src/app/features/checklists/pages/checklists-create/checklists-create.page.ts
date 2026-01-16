@@ -20,7 +20,7 @@ export class ChecklistsCreatePage extends BaseComponent implements OnInit {
 
   checklistId: string | null = this.normalizeId(this.id());
   submitted = false;
-  pageTitle = 'Novo checklist';
+  pageTitle = 'Nova análise de risco';
 
   form = this.fb.group({
     name: ['', Validators.required],
@@ -36,12 +36,12 @@ export class ChecklistsCreatePage extends BaseComponent implements OnInit {
       this.service.getById(this.checklistId).subscribe({
         next: (data) => {
           this.form.patchValue(data);
-          this.pageTitle = `Editar checklist ${data?.name ?? ''}`.trim();
+          this.pageTitle = `Editar análise de risco ${data?.name ?? ''}`.trim();
         },
-        error: () => this.toast.error('Erro ao carregar checklist.'),
+        error: () => this.toast.error('Erro ao carregar análise de risco.'),
       });
     } else {
-      this.pageTitle = 'Novo checklist';
+      this.pageTitle = 'Nova análise de risco';
     }
   }
 
@@ -71,18 +71,18 @@ export class ChecklistsCreatePage extends BaseComponent implements OnInit {
     if (this.checklistId) {
       this.service.update(this.checklistId, payload).subscribe({
         next: () => {
-          this.toast.success('Checklist atualizado com sucesso!');
+          this.toast.success('Análise de risco atualizada com sucesso!');
           this.navigate('/admin/checklists');
         },
-        error: () => this.toast.error('Erro ao atualizar checklist.'),
+        error: () => this.toast.error('Erro ao atualizar análise de risco.'),
       });
     } else {
       this.service.create(payload).subscribe({
         next: () => {
-          this.toast.success('Checklist criado com sucesso!');
+          this.toast.success('Análise de risco criada com sucesso!');
           this.navigate('/admin/checklists');
         },
-        error: () => this.toast.error('Erro ao criar checklist.'),
+        error: () => this.toast.error('Erro ao criar análise de risco.'),
       });
     }
   }

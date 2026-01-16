@@ -10,9 +10,9 @@
     <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
       <div class="field">
         <label for="name">Nome *</label>
-        <input id="name" type="text" formControlName="name" placeholder="Nome do checklist" />
+        <input id="name" type="text" formControlName="name" placeholder="Nome da análise de risco" />
         @if (isInvalid('name')) {
-        <small class="error-msg">Informe o nome do checklist.</small>
+        <small class="error-msg">Informe o nome da análise de risco.</small>
         }
       </div>
 

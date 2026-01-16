@@ -1,5 +1,5 @@
 ﻿<app-top-page
-  [title]="optionId ? 'Editar Opcao' : 'Nova Opcao'"
+  [title]="optionId ? 'Editar Opção' : 'Nova Opção'"
   icon="pi pi-list"
   [showBack]="true"
   [backLink]="['/admin/checklists', checklistId, 'itens', itemId, 'opcoes']">
@@ -9,15 +9,15 @@
   <div class="form-card">
     <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
       <div class="field">
-        <label for="label">Rotulo *</label>
-        <input id="label" type="text" formControlName="label" placeholder="Digite o rotulo" />
+        <label for="label">Rótulo *</label>
+        <input id="label" type="text" formControlName="label" placeholder="Digite o rótulo" />
         @if (isInvalid('label')) {
-        <small class="error-msg">Informe o rotulo.</small>
+        <small class="error-msg">Informe o rótulo.</small>
         }
       </div>
 
       <div class="field inline">
-        <label for="requireExplanation">Requer explicacao</label>
+        <label for="requireExplanation">Requer explicação</label>
         <label class="switch">
           <input id="requireExplanation" type="checkbox" formControlName="requireExplanation" />
           <span class="slider"></span>

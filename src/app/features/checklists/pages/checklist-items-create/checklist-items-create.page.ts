@@ -21,7 +21,7 @@ export class ChecklistItemsCreatePage extends BaseComponent implements OnInit {
   checklistId = this.route.snapshot.params['checklistId'];
   itemId = this.route.snapshot.params['itemId'];
   submitted = false;
-  pageTitle = 'Novo item';
+  pageTitle = 'Nova pergunta';
 
   form = this.fb.group({
     question: ['', Validators.required],
@@ -37,12 +37,12 @@ export class ChecklistItemsCreatePage extends BaseComponent implements OnInit {
       this.service.getById(this.checklistId, this.itemId).subscribe({
         next: (data) => {
           this.form.patchValue({ question: data.question, order: data.order });
-          this.pageTitle = `Editar item ${data?.question ?? ''}`.trim();
+          this.pageTitle = `Editar pergunta ${data?.question ?? ''}`.trim();
         },
-        error: () => this.toast.error('Erro ao carregar item.'),
+        error: () => this.toast.error('Erro ao carregar pergunta.'),
       });
     } else {
-      this.pageTitle = 'Novo item';
+      this.pageTitle = 'Nova pergunta';
     }
   }
 
@@ -66,18 +66,18 @@ export class ChecklistItemsCreatePage extends BaseComponent implements OnInit {
     if (this.itemId) {
       this.service.update(this.checklistId, this.itemId, payload).subscribe({
         next: () => {
-          this.toast.success('Item atualizado com sucesso!');
+          this.toast.success('Pergunta atualizada com sucesso!');
           this.navigate(['/admin/checklists', this.checklistId, 'itens']);
         },
-        error: () => this.toast.error('Erro ao atualizar item.'),
+        error: () => this.toast.error('Erro ao atualizar pergunta.'),
       });
     } else {
       this.service.create(this.checklistId, payload).subscribe({
         next: () => {
-          this.toast.success('Item criado com sucesso!');
+          this.toast.success('Pergunta criada com sucesso!');
           this.navigate(['/admin/checklists', this.checklistId, 'itens']);
         },
-        error: () => this.toast.error('Erro ao criar item.'),
+        error: () => this.toast.error('Erro ao criar pergunta.'),
       });
     }
   }

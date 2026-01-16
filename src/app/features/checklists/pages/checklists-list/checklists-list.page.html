@@ -1,5 +1,5 @@
 <app-top-page
-  title="Checklists"
+  title="Análise de riscos"
   icon="pi pi-clipboard"
   [showAdd]="true"
   addLabel="Novo"
@@ -13,7 +13,7 @@
     <div class="table-header">
       <div>
         <p class="eyebrow">Registros</p>
-        <h3>Checklists</h3>
+        <h3>Análise de riscos</h3>
         <p class="subtitle">Acesse itens, edite ou remova.</p>
       </div>
     </div>
@@ -46,14 +46,14 @@
                   icon="pi pi-list"
                   class="p-button-text action-btn"
                   [routerLink]="['/admin/checklists', row.id, 'itens']"
-                  pTooltip="Itens do checklist" tooltipPosition="top" appendTo="body">
+                  pTooltip="Itens da análise de risco" tooltipPosition="top" appendTo="body">
                 </button>
                 <button
                   pButton
                   icon="pi pi-pencil"
                   class="p-button-text action-btn"
                   [routerLink]="['/admin/checklists', 'editar', row.id]"
-                  pTooltip="Editar checklist" tooltipPosition="top" appendTo="body">
+                  pTooltip="Editar análise de risco" tooltipPosition="top" appendTo="body">
                 </button>
                 <button
                   pButton
@@ -61,7 +61,7 @@
                   class="p-button-text p-button-danger action-btn"
                   (click)="openDeleteConfirm(row)"
                   [disabled]="deletingId === row.id"
-                  pTooltip="Remover checklist" tooltipPosition="top" appendTo="body">
+                  pTooltip="Remover análise de risco" tooltipPosition="top" appendTo="body">
                 </button>
               </td>
             </tr>
@@ -70,8 +70,8 @@
           <ng-template pTemplate="emptymessage">
             <div class="empty-state">
               <i class="pi pi-clipboard"></i>
-              <p>Nenhum checklist encontrado.</p>
-              <span>Cadastre um novo checklist.</span>
+              <p>Nenhuma análise de risco encontrada.</p>
+              <span>Cadastre uma nova análise de risco.</span>
             </div>
           </ng-template>
 
@@ -88,7 +88,7 @@
 
   <app-confirm-modal
     [visible]="showConfirmModal"
-    [title]="'Remover ' + (selectedName || 'checklist') + '?'"
+    [title]="'Remover ' + (selectedName || 'análise de risco') + '?'"
     message="Esta ação é definitiva. Confirme para seguir."
     confirmLabel="Remover"
     cancelLabel="Cancelar"

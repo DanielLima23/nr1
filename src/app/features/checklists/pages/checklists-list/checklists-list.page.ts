@@ -49,7 +49,7 @@ export class ChecklistsListPage extends BaseComponent implements OnInit {
       },
       error: () => {
         this.loading.set(false);
-        this.toast.error('Erro ao carregar checklists.');
+        this.toast.error('Erro ao carregar análise de riscos.');
       },
     });
   }
@@ -75,7 +75,7 @@ export class ChecklistsListPage extends BaseComponent implements OnInit {
 
     this.service.deleteById(idToRemove).subscribe({
       next: () => {
-        this.toast.success('Checklist removido com sucesso!');
+        this.toast.success('Análise de risco removida com sucesso!');
         this.load();
         this.deletingId = null;
         this.selectedId = null;
@@ -83,7 +83,7 @@ export class ChecklistsListPage extends BaseComponent implements OnInit {
       },
       error: () => {
         this.deletingId = null;
-        this.toast.error('Erro ao remover checklist.');
+        this.toast.error('Erro ao remover análise de risco.');
       },
     });
   }

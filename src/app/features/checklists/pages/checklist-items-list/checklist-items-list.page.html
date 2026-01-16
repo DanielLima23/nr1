@@ -1,5 +1,5 @@
 <app-top-page
-  title="Itens do Checklist"
+  title="Itens da Análise de risco"
   icon="pi pi-list"
   [showAdd]="true"
   addLabel="Novo"
@@ -14,7 +14,7 @@
       <div>
         <p class="eyebrow">Registros</p>
         <h3>Itens</h3>
-        <p class="subtitle">Gerencie perguntas e opções do checklist.</p>
+        <p class="subtitle">Gerencie perguntas e opções da análise de risco.</p>
       </div>
     </div>
 
@@ -53,7 +53,7 @@
                   icon="pi pi-pencil"
                   class="p-button-text action-btn"
                   [routerLink]="['/admin/checklists', checklistId, 'itens', 'editar', row.id]"
-                  pTooltip="Editar item" tooltipPosition="top" appendTo="body">
+                  pTooltip="Editar pergunta" tooltipPosition="top" appendTo="body">
                 </button>
                 <button
                   pButton
@@ -61,7 +61,7 @@
                   class="p-button-text p-button-danger action-btn"
                   (click)="openDeleteConfirm(row)"
                   [disabled]="deletingId === row.id"
-                  pTooltip="Remover item" tooltipPosition="top" appendTo="body">
+                  pTooltip="Remover pergunta" tooltipPosition="top" appendTo="body">
                 </button>
               </td>
             </tr>
@@ -71,7 +71,7 @@
             <div class="empty-state">
               <i class="pi pi-list"></i>
               <p>Nenhum item encontrado.</p>
-              <span>Adicione perguntas para este checklist.</span>
+              <span>Adicione perguntas para esta análise de risco.</span>
             </div>
           </ng-template>
 
@@ -88,7 +88,7 @@
 
   <app-confirm-modal
     [visible]="showConfirmModal"
-    [title]="'Remover ' + (selectedLabel || 'item') + '?'"
+    [title]="'Remover ' + (selectedLabel || 'pergunta') + '?'"
     message="Esta ação é definitiva. Confirme para seguir."
     confirmLabel="Remover"
     cancelLabel="Cancelar"
