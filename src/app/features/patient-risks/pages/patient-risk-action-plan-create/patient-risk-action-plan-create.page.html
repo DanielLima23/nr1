@@ -10,21 +10,21 @@
   <div class="form-card">
     <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
       <div class="field">
-        <label>Titulo *</label>
-        <input type="text" formControlName="title" placeholder="Titulo da medida" />
+        <label>Título *</label>
+        <input type="text" formControlName="title" placeholder="Título da medida" />
         @if (isInvalid('title')) {
-        <small class="error-msg">Informe o titulo.</small>
+        <small class="error-msg">Informe o título.</small>
         }
       </div>
 
       <div class="field" style="grid-column: 1 / -1;">
-        <label>Descricao</label>
-        <textarea rows="3" formControlName="description" placeholder="Descricao"></textarea>
+        <label>Descrição</label>
+        <textarea rows="3" formControlName="description" placeholder="Descrição"></textarea>
       </div>
 
       <div class="field">
-        <label>Responsavel</label>
-        <input type="text" formControlName="responsible" placeholder="Nome do responsavel" />
+        <label>Responsável</label>
+        <input type="text" formControlName="responsible" placeholder="Nome do responsável" />
       </div>
 
       <div class="field">
@@ -37,7 +37,7 @@
         <label class="switch">
           <input type="checkbox" formControlName="completed" />
           <span class="slider"></span>
-          <span class="switch-label">Concluido</span>
+          <span class="switch-label">Concluído</span>
         </label>
       </div>
 

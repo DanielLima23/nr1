@@ -9,22 +9,22 @@
   <div class="form-card">
     <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
       <div class="field">
-        <label for="title">Titulo *</label>
-        <input id="title" type="text" formControlName="title" placeholder="Digite o titulo do plano" />
+        <label for="title">Título *</label>
+        <input id="title" type="text" formControlName="title" placeholder="Digite o título do plano" />
         @if (isInvalid('title')) {
-        <small class="error-msg">Informe o titulo.</small>
+        <small class="error-msg">Informe o título.</small>
         }
       </div>
 
       <div class="field" style="grid-column: 1 / -1;">
-        <label for="description">Descricao</label>
+        <label for="description">Descrição</label>
         <textarea id="description" rows="3" formControlName="description" placeholder="Detalhe o plano"></textarea>
       </div>
 
       <div class="two-cols">
         <div class="field">
-          <label for="responsible">Responsavel</label>
-          <input id="responsible" type="text" formControlName="responsible" placeholder="Nome do responsavel" />
+          <label for="responsible">Responsável</label>
+          <input id="responsible" type="text" formControlName="responsible" placeholder="Nome do responsável" />
         </div>
 
         <div class="field">
@@ -38,7 +38,7 @@
         <label class="switch">
           <input id="completed" type="checkbox" formControlName="completed" />
           <span class="slider"></span>
-          <span class="switch-label">Concluido</span>
+          <span class="switch-label">Concluído</span>
         </label>
       </div>
 

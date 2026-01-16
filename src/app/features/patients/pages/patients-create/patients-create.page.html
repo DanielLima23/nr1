@@ -41,17 +41,17 @@
       </div>
 
       <div class="field">
-        <label for="jobFunction">Funcao *</label>
+        <label for="jobFunction">Função *</label>
         <p-dropdown
           id="jobFunction"
           [options]="jobFunctions"
           optionLabel="name"
           optionValue="id"
-          placeholder="Selecione a funcao"
+          placeholder="Selecione a função"
           formControlName="jobFunctionId">
         </p-dropdown>
         @if (isInvalid('jobFunctionId')) {
-        <small class="error-msg">Selecione a funcao.</small>
+        <small class="error-msg">Selecione a função.</small>
         }
       </div>
 
@@ -72,7 +72,7 @@
       </div>
 
       <div class="field">
-        <label for="tenureMonths">Tempo na funcao (meses) *</label>
+        <label for="tenureMonths">Tempo na função (meses) *</label>
         <input id="tenureMonths" type="number" formControlName="tenureMonths" min="0" />
         @if (isInvalid('tenureMonths')) {
         <small class="error-msg">Informe o tempo em meses (0 ou maior).</small>

@@ -69,7 +69,7 @@
           } @else if (!cg.groups.length) {
             <div class="empty-state">
               <i class="pi pi-sitemap"></i>
-              <p>Nao encontramos setores com medidas.</p>
+              <p>Não encontramos setores com medidas.</p>
               <span>Verifique se a empresa possui setores e medidas cadastradas.</span>
             </div>
           } @else {
@@ -93,10 +93,10 @@
                       <ng-template pTemplate="header">
                         <tr>
                           <th>Medida</th>
-                          <th>Responsavel</th>
+                          <th>Responsável</th>
                           <th>Vencimento</th>
                           <th>Status</th>
-                          <th class="align-right">Acoes</th>
+                          <th class="align-right">Ações</th>
                         </tr>
                       </ng-template>
 
@@ -104,15 +104,15 @@
                         @if (getForm(row.id); as form) {
                           <tr [formGroup]="form">
                             <td>
-                              <div class="plan-title">{{ row.title || 'Sem titulo' }}</div>
+                              <div class="plan-title">{{ row.title || 'Sem título' }}</div>
                               <div class="plan-meta">
-                                <span *ngIf="row.jobFunctionName">Funcao: {{ row.jobFunctionName }}</span>
+                                <span *ngIf="row.jobFunctionName">Função: {{ row.jobFunctionName }}</span>
                                 <span *ngIf="row.patientName">Paciente: {{ row.patientName }}</span>
                                 <span *ngIf="row.riskTitle">Medida mitigadora: {{ row.riskTitle }}</span>
                               </div>
                             </td>
                             <td>
-                              <input type="text" pInputText formControlName="responsible" placeholder="Responsavel" class="editable-input" />
+                              <input type="text" pInputText formControlName="responsible" placeholder="Responsável" class="editable-input" />
                             </td>
                             <td>
                               <input type="date" formControlName="dueDate" class="date-input" [disabled]="isEmpresaRole" />
@@ -208,11 +208,11 @@
   (onHide)="closeDetail()">
   <div class="detail-dialog">
     <div class="detail-row">
-      <strong>Titulo:</strong>
+      <strong>Título:</strong>
       <span>{{ detailData.title || '-' }}</span>
     </div>
     <div class="detail-row" *ngIf="detailData.description">
-      <strong>Descricao:</strong>
+      <strong>Descrição:</strong>
       <span>{{ detailData.description }}</span>
     </div>
     <div class="detail-row" *ngIf="detailData.riskTitle">

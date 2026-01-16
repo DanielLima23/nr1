@@ -128,7 +128,7 @@ export class PatientsCreatePage extends BaseComponent implements OnInit {
     }
     this.jobFunctionService.list(companyId, sectorId).subscribe({
       next: (list) => (this.jobFunctions = list || []),
-      error: () => this.toast.error('Erro ao carregar funcoes.'),
+      error: () => this.toast.error('Erro ao carregar funções.'),
     });
   }
 

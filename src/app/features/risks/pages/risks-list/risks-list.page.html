@@ -12,7 +12,7 @@
       <div>
         <p class="eyebrow">Registros</p>
         <h3>Riscos</h3>
-        <p class="subtitle">Gerencie e Acoesse medidas mitigadoras rapidamente.</p>
+        <p class="subtitle">Gerencie e acesse medidas mitigadoras rapidamente.</p>
       </div>
     </div>
 
@@ -28,7 +28,7 @@
 
           <ng-template pTemplate="header">
             <tr>
-              <th>Titulo</th>
+              <th>Título</th>
               <th>Ativo</th>
               <th class="align-right">Ações</th>
             </tr>
@@ -42,7 +42,7 @@
                   class="status-chip"
                   [class.active]="row.active"
                   [class.inactive]="!row.active">
-                  {{ row.active ? 'Sim' : 'NÇœo' }}
+                  {{ row.active ? 'Sim' : 'Não' }}
                 </span>
               </td>
               <td class="action-col">
@@ -95,7 +95,7 @@
 <app-confirm-modal
   [visible]="showConfirmModal"
   [title]="'Remover ' + (selectedTitle || 'risco') + '?'"
-  message="Esta aÇõÇœo Ç¸ definitiva. Confirme para seguir."
+  message="Esta ação é definitiva. Confirme para seguir."
   confirmLabel="Remover"
   cancelLabel="Cancelar"
   icon="pi pi-trash"

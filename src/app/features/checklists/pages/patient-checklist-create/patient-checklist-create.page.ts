@@ -186,7 +186,7 @@ export class PatientChecklistCreatePage extends BaseComponent implements OnInit 
     const riskId = this.riskForm.value.riskId || '';
     const already = this.patientRisks.find((r) => r.riskId === riskId);
     if (already) {
-      this.toast.warn('Esse risco ja foi adicionado.');
+      this.toast.warn('Esse risco já foi adicionado.');
       return;
     }
 
@@ -225,7 +225,7 @@ export class PatientChecklistCreatePage extends BaseComponent implements OnInit 
           target.plans = [...localPlans, ...(target.plans || [])];
         }
       },
-      error: () => this.toast.warn('Nao foi possivel carregar planos do risco.'),
+      error: () => this.toast.warn('Não foi possível carregar planos do risco.'),
     });
   }
 

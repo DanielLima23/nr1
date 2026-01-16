@@ -17,18 +17,18 @@
       </div>
 
       <div class="field">
-        <label>Responsavel *</label>
+        <label>Responsável *</label>
         <input type="text" formControlName="responsibleName" required />
         @if (isInvalid('responsibleName')) {
-        <small class="error-msg">Informe o responsavel.</small>
+        <small class="error-msg">Informe o responsável.</small>
         }
       </div>
 
       <div class="field">
-        <label>Email *</label>
+        <label>E-mail *</label>
         <input type="email" formControlName="responsibleEmail" required />
         @if (isInvalid('responsibleEmail')) {
-        <small class="error-msg">Informe um email valido.</small>
+        <small class="error-msg">Informe um e-mail válido.</small>
         }
       </div>
 
@@ -45,22 +45,22 @@
       </div>
 
       <div class="field readonly">
-        <label>Senha de usuario</label>
+        <label>Senha de usuário</label>
         <input
           type="text"
           formControlName="generatedPassword" />
       </div>
 
       <div class="field" style="grid-column: 1 / -1;">
-        <label>Endereco *</label>
+        <label>Endereço *</label>
         <input type="text" formControlName="address" required />
         @if (isInvalid('address')) {
-        <small class="error-msg">Informe o endereco.</small>
+        <small class="error-msg">Informe o endereço.</small>
         }
       </div>
 
       <div class="field" style="grid-column: 1 / -1;">
-        <label>Observacao</label>
+        <label>Observação</label>
         <textarea formControlName="observations" rows="3"></textarea>
       </div>
 

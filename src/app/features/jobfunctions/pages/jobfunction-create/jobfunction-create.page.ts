@@ -34,7 +34,7 @@ export class JobFunctionCreatePage extends BaseComponent implements OnInit {
   sectorId!: string;
   jobFunctionId?: string;
   submitted = false;
-  pageTitle = 'Nova funcao';
+  pageTitle = 'Nova função';
 
   form = this.fb.group({
     name: ['', Validators.required],
@@ -51,10 +51,10 @@ export class JobFunctionCreatePage extends BaseComponent implements OnInit {
         .getById(this.companyId, this.sectorId, this.jobFunctionId)
         .subscribe((jobFunction) => {
           this.form.patchValue(jobFunction);
-          this.pageTitle = `Editar funcao ${jobFunction?.name ?? ''}`.trim();
+          this.pageTitle = `Editar função ${jobFunction?.name ?? ''}`.trim();
         });
     } else {
-      this.pageTitle = 'Nova funcao';
+      this.pageTitle = 'Nova função';
     }
   }
 
@@ -74,18 +74,18 @@ export class JobFunctionCreatePage extends BaseComponent implements OnInit {
     if (this.jobFunctionId) {
       this.service.update(this.companyId, this.sectorId, this.jobFunctionId, body).subscribe({
         next: () => {
-          this.toast.success('Funcao atualizada com sucesso!');
+          this.toast.success('Função atualizada com sucesso!');
           this.navigate(['/admin/empresa', this.companyId, 'setores', this.sectorId, 'funcoes']);
         },
-        error: () => this.toast.error('Erro ao atualizar funcao.'),
+        error: () => this.toast.error('Erro ao atualizar função.'),
       });
     } else {
       this.service.create(this.companyId, this.sectorId, body).subscribe({
         next: () => {
-          this.toast.success('Funcao criada com sucesso!');
+          this.toast.success('Função criada com sucesso!');
           this.navigate(['/admin/empresa', this.companyId, 'setores', this.sectorId, 'funcoes']);
         },
-        error: () => this.toast.error('Erro ao criar funcao.'),
+        error: () => this.toast.error('Erro ao criar função.'),
       });
     }
   }

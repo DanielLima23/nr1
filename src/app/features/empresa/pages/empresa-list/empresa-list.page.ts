@@ -42,7 +42,7 @@ export class EmpresaListPage extends BaseComponent implements OnInit {
       if (!this.companyId) {
         this.loading.set(false);
         this.service.setCompanies([]);
-        this.toast.warn('Nenhuma empresa vinculada ao usuario.');
+        this.toast.warn('Nenhuma empresa vinculada ao usuário.');
         return;
       }
 

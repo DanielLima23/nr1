@@ -32,11 +32,11 @@
 
           <ng-template pTemplate="header">
             <tr>
-              <th>Titulo</th>
-              <th>Responsavel</th>
+              <th>Título</th>
+              <th>Responsável</th>
               <th>Vencimento</th>
               <th>Status</th>
-              <th class="align-right">Acoes</th>
+              <th class="align-right">Ações</th>
             </tr>
           </ng-template>
 
@@ -50,7 +50,7 @@
                   class="status-chip"
                   [class.active]="row.completed"
                   [class.inactive]="!row.completed">
-                  {{ row.completed ? 'Concluido' : 'Pendente' }}
+                  {{ row.completed ? 'Concluído' : 'Pendente' }}
                 </span>
               </td>
               <td class="action-col">

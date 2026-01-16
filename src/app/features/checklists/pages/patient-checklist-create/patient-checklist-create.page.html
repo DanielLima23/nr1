@@ -167,7 +167,7 @@
                       @if (risk.notes) {
                       <small class="risk-notes">{{ risk.notes }}</small>
                       } @else {
-                      <small class="risk-notes muted">Sem observacoes</small>
+                      <small class="risk-notes muted">Sem observações</small>
                       }
                     </div>
                     <div class="risk-actions">
@@ -189,11 +189,11 @@
                               class="status-chip"
                               [class.pending]="!plan.existingId"
                               [class.done]="!!plan.existingId && plan.completed">
-                              {{ plan.existingId ? (plan.completed ? 'Concluido' : 'Pendente') : 'Pendente' }}
+                              {{ plan.existingId ? (plan.completed ? 'Concluído' : 'Pendente') : 'Pendente' }}
                             </span>
                           </div>
                           <small class="plan-meta">
-                            <span>{{ plan.responsible || 'Sem responsavel' }}</span>
+                            <span>{{ plan.responsible || 'Sem responsável' }}</span>
                             @if (plan.dueDate) {
                               <span> · Venc: {{ plan.dueDate | date:'dd/MM/yyyy' }}</span>
                             }
@@ -223,12 +223,12 @@
                     @if (planFormVisible[risk.tempId]) {
                       <form class="panel-form plan-form" [formGroup]="planDrafts[risk.tempId]" (ngSubmit)="addPlan(risk)">
                         <p class="section-title">Novo plano</p>
-                        <input type="text" formControlName="title" placeholder="Titulo do plano" />
+                        <input type="text" formControlName="title" placeholder="Título do plano" />
                         @if (isPlanInvalid('title', risk.tempId)) {
-                        <small class="error-msg">Informe o titulo.</small>
+                        <small class="error-msg">Informe o título.</small>
                         }
-                        <textarea rows="2" formControlName="description" placeholder="Descricao (opcional)"></textarea>
-                        <input type="text" formControlName="responsible" placeholder="Responsavel (opcional)" />
+                        <textarea rows="2" formControlName="description" placeholder="Descrição (opcional)"></textarea>
+                        <input type="text" formControlName="responsible" placeholder="Responsável (opcional)" />
                         <input type="date" formControlName="dueDate" />
 
                         <div class="plan-buttons">

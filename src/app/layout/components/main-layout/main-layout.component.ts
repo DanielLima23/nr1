@@ -112,7 +112,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
     };
 
     const cadastrosChildren: SideNavItem[] = [
-      { label: 'Usuarios', icon: 'pi-users', route: '/admin/usuarios', requiredRoles: [admin] },
+      { label: 'Usuários', icon: 'pi-users', route: '/admin/usuarios', requiredRoles: [admin] },
       { label: 'Empresa', icon: 'pi-briefcase', route: '/admin/empresa', requiredRoles: [admin, engenheiro] },
       { label: 'Riscos', icon: 'pi-exclamation-triangle', route: '/admin/riscos', requiredRoles: [admin, engenheiro] },
       { label: 'Trabalhador(a)', icon: 'pi-id-card', route: '/admin/pacientes', requiredRoles: [admin, medico, engenheiro] },

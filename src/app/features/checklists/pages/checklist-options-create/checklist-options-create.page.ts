@@ -42,7 +42,7 @@ export class ChecklistOptionsCreatePage extends BaseComponent implements OnInit 
             requireExplanation: data.requireExplanation,
             order: data.order,
           }),
-        error: () => this.toast.error('Erro ao carregar opcao.'),
+        error: () => this.toast.error('Erro ao carregar opção.'),
       });
     }
   }
@@ -70,18 +70,18 @@ export class ChecklistOptionsCreatePage extends BaseComponent implements OnInit 
     if (this.optionId) {
       this.service.update(this.checklistId, this.itemId, this.optionId, payload).subscribe({
         next: () => {
-          this.toast.success('Opcao atualizada com sucesso!');
+          this.toast.success('Opção atualizada com sucesso!');
           this.navigate(listLink);
         },
-        error: () => this.toast.error('Erro ao atualizar opcao.'),
+        error: () => this.toast.error('Erro ao atualizar opção.'),
       });
     } else {
       this.service.create(this.checklistId, this.itemId, payload).subscribe({
         next: () => {
-          this.toast.success('Opcao criada com sucesso!');
+          this.toast.success('Opção criada com sucesso!');
           this.navigate(listLink);
         },
-        error: () => this.toast.error('Erro ao criar opcao.'),
+        error: () => this.toast.error('Erro ao criar opção.'),
       });
     }
   }
