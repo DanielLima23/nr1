@@ -20,6 +20,16 @@
         (click)="handleBack($event)">
       </button>
     }
+    @if (showImport) {
+      <button
+        pButton
+        type="button"
+        [label]="importLabel"
+        [icon]="importIcon"
+        class="import-btn"
+        (click)="handleImport($event)">
+      </button>
+    }
     @if (showAdd) {
       <button
         pButton

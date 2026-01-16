@@ -6,7 +6,9 @@
   [addLink]="selectedCompanyId ? ['/admin/pacientes/criar'] : null"
   [addQueryParams]="selectedCompanyId ? { companyId: selectedCompanyId } : null"
   [showBack]="true"
-  [backLink]="'/admin/dashboard'">
+  [backLink]="'/admin/dashboard'"
+  [showImport]="true"
+  (import)="openImportModal()">
 </app-top-page>
 
 <section class="page-shell">
@@ -127,6 +129,15 @@
     (confirm)="confirmDelete()"
     (cancel)="closeDeleteConfirm()">
   </app-confirm-modal>
+
+  <app-import-modal
+    [(visible)]="showImportModal"
+    title="Importar Trabalhadores"
+    [companies]="(companies$ | async) ?? []"
+    [loading]="importing"
+    (confirm)="onImportConfirm($event)"
+    (cancel)="closeImportModal()">
+  </app-import-modal>
 </section>
 
 

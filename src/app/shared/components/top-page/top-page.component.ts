@@ -25,7 +25,12 @@ export class TopPageComponent extends BaseComponent {
   @Input() addLink: string | any[] | null = null;
   @Input() addQueryParams: { [key: string]: any } | null = null;
 
+  @Input() showImport: boolean = false;
+  @Input() importLabel: string = 'Importar';
+  @Input() importIcon: string = 'pi pi-upload';
+
   @Output() add = new EventEmitter<void>();
+  @Output() import = new EventEmitter<void>();
 
   handleBack(event: Event) {
     event.preventDefault();
@@ -55,5 +60,10 @@ export class TopPageComponent extends BaseComponent {
       event.preventDefault();
       this.add.emit();
     }
+  }
+
+  handleImport(event: Event) {
+    event.preventDefault();
+    this.import.emit();
   }
 }

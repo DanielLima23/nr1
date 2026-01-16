@@ -1,0 +1,83 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [closable]="!loading"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '500px' }"
+  (onHide)="onHide()">
+
+  <ng-template pTemplate="header">
+    <div class="modal-header">
+      <i class="pi pi-upload"></i>
+      <span>{{ title }}</span>
+    </div>
+  </ng-template>
+
+  <div class="modal-content">
+    <div class="form-group">
+      <label for="company">Empresa *</label>
+      <p-dropdown
+        id="company"
+        [options]="companies"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Selecione uma empresa"
+        [(ngModel)]="selectedCompanyId"
+        [disabled]="loading"
+        [style]="{ width: '100%' }">
+      </p-dropdown>
+    </div>
+
+    <div class="form-group">
+      <label for="file">Planilha Excel *</label>
+      <div class="file-input-wrapper">
+        <input
+          #fileInput
+          type="file"
+          id="file"
+          accept=".xlsx,.xls"
+          (change)="onFileSelect($event)"
+          [disabled]="loading"
+          class="file-input">
+        <button
+          pButton
+          type="button"
+          label="Escolher arquivo"
+          icon="pi pi-file"
+          class="p-button-outlined"
+          (click)="fileInput.click()"
+          [disabled]="loading">
+        </button>
+        @if (fileName) {
+          <span class="file-name">{{ fileName }}</span>
+        }
+      </div>
+      <small class="help-text">
+        A planilha deve conter as colunas: Setor, Função, Nome, DataNasc
+      </small>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      label="Cancelar"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="onCancel()"
+      [disabled]="loading">
+    </button>
+    <button
+      pButton
+      type="button"
+      label="Importar"
+      icon="pi pi-check"
+      (click)="onConfirm()"
+      [disabled]="!isValid || loading"
+      [loading]="loading">
+    </button>
+  </ng-template>
+
+</p-dialog>
