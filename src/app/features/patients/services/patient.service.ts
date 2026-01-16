@@ -84,11 +84,27 @@ export class PatientService extends BaseCrudService {
           
           // Converte para o formato esperado pelo backend
           const payload = jsonData.map((row: any) => {
-            // Converte a data do formato DD/MM/AAAA para AAAA-MM-DD
-            let birthDate = '';
-            if (row.DataNasc) {
-              const dateStr = String(row.DataNasc);
-              // Tenta diferentes formatos de data
+            const defaultBirthDate = '2000-01-01';
+            const rawBirthDate =
+              row.DataNasc ?? row['Data Nasc'] ?? row['Data Nascimento'] ?? row.DataNascimento ?? row.Nascimento;
+            
+            const toIsoDate = (date: Date) =>
+              `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+            
+            let birthDate = defaultBirthDate;
+
+            if (rawBirthDate instanceof Date && !isNaN(rawBirthDate.getTime())) {
+              birthDate = toIsoDate(rawBirthDate);
+            } else if (typeof rawBirthDate === 'number') {
+              // Excel armazena datas como números (dias desde 1900-01-01)
+              const excelEpoch = new Date(1900, 0, 1);
+              const daysOffset = rawBirthDate - 2; // Ajuste para bug do Excel (1900 não foi ano bissexto)
+              const date = new Date(excelEpoch.getTime() + daysOffset * 24 * 60 * 60 * 1000);
+              if (!isNaN(date.getTime())) {
+                birthDate = toIsoDate(date);
+              }
+            } else if (rawBirthDate) {
+              const dateStr = String(rawBirthDate).trim();
               if (dateStr.includes('/')) {
                 const parts = dateStr.split('/');
                 if (parts.length === 3) {
@@ -103,7 +119,7 @@ export class PatientService extends BaseCrudService {
               sectorName: row.Setor || '',
               jobFunctionName: row.Função || row.Funcao || '',
               patientName: row.Nome || '',
-              birthDate: birthDate,
+              birthDate,
               tenureMonths: 0
             };
           });
