@@ -35,7 +35,7 @@ export class PatientChecklistDetailPage extends BaseComponent implements OnInit 
   private load() {
     this.service.getById(this.companyId, this.patientId, this.checklistId).subscribe({
       next: (data) => (this.checklist = data),
-      error: () => this.toast.error('Erro ao carregar checklist.'),
+      error: () => this.toast.error('Erro ao carregar análise de riscos.'),
     });
   }
 }

@@ -51,7 +51,7 @@ export class PatientChecklistListPage extends BaseComponent implements OnInit {
       next: () => this.loading.set(false),
       error: () => {
         this.loading.set(false);
-        this.toast.error('Erro ao carregar checklists do paciente.');
+        this.toast.error('Erro ao carregar análises de riscos do trabalhador.');
       },
     });
   }

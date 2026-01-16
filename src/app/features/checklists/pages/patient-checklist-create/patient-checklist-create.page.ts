@@ -117,7 +117,7 @@ export class PatientChecklistCreatePage extends BaseComponent implements OnInit 
   private loadChecklists() {
     this.checklistService.list().subscribe({
       next: (list) => (this.checklists = list || []),
-      error: () => this.toast.error('Erro ao carregar checklists.'),
+      error: () => this.toast.error('Erro ao carregar análises de riscos.'),
     });
   }
 
@@ -316,7 +316,7 @@ export class PatientChecklistCreatePage extends BaseComponent implements OnInit 
         this.items = checklist?.items || [];
         this.buildAnswers();
       },
-      error: () => this.toast.error('Erro ao carregar itens do checklist.'),
+      error: () => this.toast.error('Erro ao carregar itens da análise de riscos.'),
     });
   }
 
@@ -472,12 +472,12 @@ export class PatientChecklistCreatePage extends BaseComponent implements OnInit 
       )
       .subscribe({
         next: () => {
-          this.toast.success('Checklist realizado com sucesso!');
+          this.toast.success('Análise de riscos realizada com sucesso!');
           this.router.navigate(['/admin/pacientes', this.patientId, 'checklists'], {
             queryParams: { companyId: this.companyId },
           });
         },
-        error: () => this.toast.error('Erro ao salvar checklist.'),
+        error: () => this.toast.error('Erro ao salvar análise de riscos.'),
       });
   }
 }

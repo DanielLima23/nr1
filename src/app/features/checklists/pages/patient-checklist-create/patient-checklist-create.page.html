@@ -1,5 +1,5 @@
 <app-top-page
-  title="Novo Checklist"
+  title="Nova Análise de riscos"
   icon="pi pi-clipboard"
   [showBack]="true"
   [backLink]="['/admin/pacientes', patientId, 'checklists']"
@@ -11,9 +11,9 @@
     <div class="form-card">
       <div class="form-header">
         <div>
-          <p class="eyebrow">Checklist do paciente</p>
-          <h3>Aplicar checklist</h3>
-          <p class="subtitle">Selecione o checklist, informe data/hora e responda as perguntas.</p>
+          <p class="eyebrow">Análise de riscos do trabalhador</p>
+          <h3>Aplicar análise de riscos</h3>
+          <p class="subtitle">Selecione a análise de riscos, informe data/hora e responda as perguntas.</p>
         </div>
         <div class="meta-hint">
           <i class="pi pi-info-circle"></i>
@@ -26,18 +26,18 @@
 
       <form [formGroup]="form" class="form-grid form-shell" (ngSubmit)="submit()">
         <div class="field">
-          <label for="checklist">Checklist *</label>
+          <label for="checklist">Análise de riscos *</label>
           <p-dropdown
             id="checklist"
             [options]="checklists"
             optionLabel="name"
             optionValue="id"
-            placeholder="Selecione um checklist"
+            placeholder="Selecione uma análise de riscos"
             formControlName="checklistId"
             (onChange)="onChecklistChange($event.value)">
           </p-dropdown>
           @if (isInvalid('checklistId')) {
-          <small class="error-msg">Selecione um checklist.</small>
+          <small class="error-msg">Selecione uma análise de riscos.</small>
           }
         </div>
 
@@ -119,7 +119,7 @@
           <div class="empty-questions">
             <i class="pi pi-list-check"></i>
             <div>
-              <p>Selecione um checklist para carregar as perguntas.</p>
+              <p>Selecione uma análise de riscos para carregar as perguntas.</p>
               <span>As questoes aparecerao aqui para voce responder.</span>
             </div>
           </div>
@@ -131,9 +131,9 @@
       <div class="panel-card">
         <div class="panel-header">
           <div>
-            <p class="eyebrow">Riscos do paciente</p>
+            <p class="eyebrow">Riscos do trabalhador</p>
             <h4>Controle de riscos</h4>
-            <p class="subtitle">Associe riscos e planos enquanto preenche o checklist.</p>
+            <p class="subtitle">Associe riscos e planos enquanto preenche a análise de riscos.</p>
           </div>
         </div>
 

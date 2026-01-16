@@ -1,5 +1,5 @@
 <app-top-page
-  title="Checklist"
+  title="Análise de riscos"
   icon="pi pi-clipboard"
   [showBack]="true"
   [backLink]="backLink"
@@ -9,7 +9,7 @@
 <div class="detail-wrapper" *ngIf="checklist">
   <div class="detail-header">
     <div>
-      <h3>{{ checklist.checklistName || 'Checklist' }}</h3>
+      <h3>{{ checklist.checklistName || 'Análise de riscos' }}</h3>
       <p>Realizado em: {{ checklist.performedAt | date:'dd/MM/yyyy HH:mm' }}</p>
     </div>
     <div class="meta">

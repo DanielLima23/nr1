@@ -116,7 +116,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
       { label: 'Empresa', icon: 'pi-briefcase', route: '/admin/empresa', requiredRoles: [admin, engenheiro] },
       { label: 'Riscos', icon: 'pi-exclamation-triangle', route: '/admin/riscos', requiredRoles: [admin, engenheiro] },
       { label: 'Trabalhador(a)', icon: 'pi-id-card', route: '/admin/pacientes', requiredRoles: [admin, medico, engenheiro] },
-      { label: 'Checklists', icon: 'pi-clipboard', route: '/admin/checklists', requiredRoles: [admin, engenheiro] },
+      { label: 'Análise de riscos', icon: 'pi-clipboard', route: '/admin/checklists', requiredRoles: [admin, engenheiro] },
     ];
 
     if (this.userRoleNormalized === empresa) {
