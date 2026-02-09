@@ -73,6 +73,40 @@
               <span>Verifique se a empresa possui setores e medidas cadastradas.</span>
             </div>
           } @else {
+            <div class="risk-summary-card">
+              <div class="risk-summary-header">
+                <h4>Riscos por empresa (independente do setor)</h4>
+                <span class="info-pill" *ngIf="cg.riskTotal">
+                  Total: {{ cg.riskTotal }}
+                </span>
+              </div>
+
+              @if (hasRiskSummary(cg)) {
+                <div class="risk-summary-body">
+                  <div class="pie-shell">
+                    <div class="pie-chart" [style.background]="pieBackground(cg.riskSummary)"></div>
+                    <div class="pie-center">
+                      <strong>{{ cg.riskTotal || 0 }}</strong>
+                      <span>Riscos</span>
+                    </div>
+                  </div>
+                  <div class="risk-legend">
+                    @for (slice of cg.riskSummary; track slice.label) {
+                      <div class="legend-item">
+                        <span class="legend-color" [style.background]="slice.color"></span>
+                        <span class="legend-label">{{ slice.label }}</span>
+                        <span class="legend-count">{{ slice.count }}</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              } @else {
+                <div class="empty-sector">
+                  <p>Sem riscos registrados para esta empresa.</p>
+                </div>
+              }
+            </div>
+
             <p-accordion [multiple]="true" class="sector-accordion">
               @for (group of cg.groups; track group.id) {
                 <p-accordionTab [header]="''">

@@ -33,6 +33,15 @@ interface CompanyGroup {
   groups: SectorGroup[];
   loading: boolean;
   showReportMenu?: boolean;
+  riskSummary?: RiskSlice[];
+  riskTotal?: number;
+}
+
+interface RiskSlice {
+  label: string;
+  count: number;
+  color: string;
+  percent: number;
 }
 
 @Component({
@@ -71,6 +80,18 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
   private forms = new Map<string, FormGroup>();
   detailVisible = false;
   detailData: { title?: string; description?: string; riskTitle?: string } = {};
+  private readonly pieColors = [
+    '#f97316',
+    '#14b8a6',
+    '#6366f1',
+    '#ef4444',
+    '#22c55e',
+    '#eab308',
+    '#0ea5e9',
+    '#a855f7',
+    '#f43f5e',
+    '#10b981',
+  ];
 
   statusOptions = [
     { label: 'Pendente', value: 1 },
@@ -124,6 +145,23 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
     const total = this.totalPlans(cg);
     const done = this.countCompleted(cg);
     return Math.max(total - done, 0);
+  }
+
+  hasRiskSummary(cg: CompanyGroup): boolean {
+    return (cg?.riskSummary?.length || 0) > 0;
+  }
+
+  pieBackground(slices: RiskSlice[] | undefined): string {
+    if (!slices || !slices.length) return '#e5e7eb';
+    let start = 0;
+    const segments = slices.map((slice) => {
+      const sweep = slice.percent * 360;
+      const end = start + sweep;
+      const segment = `${slice.color} ${start}deg ${end}deg`;
+      start = end;
+      return segment;
+    });
+    return `conic-gradient(${segments.join(', ')})`;
   }
 
   private isCompleted(status: any): boolean {
@@ -280,6 +318,8 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
 
     this.clearCompanyEntries(companyId);
     target.loading = true;
+    target.riskSummary = [];
+    target.riskTotal = 0;
 
     this.sectorService.list(companyId).subscribe({
       next: (sectors) => {
@@ -305,6 +345,9 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
 
         if (!sectorCalls.length) {
           target.groups = this.buildGroups([], target.sectors);
+          const summary = this.buildRiskSummary([]);
+          target.riskSummary = summary.slices;
+          target.riskTotal = summary.total;
           target.loading = false;
           return;
         }
@@ -322,6 +365,9 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
             });
 
             target.groups = this.buildGroups(safePlans, target.sectors);
+            const summary = this.buildRiskSummary(safePlans);
+            target.riskSummary = summary.slices;
+            target.riskTotal = summary.total;
             target.loading = false;
           },
           error: () => {
@@ -373,6 +419,29 @@ export class CompanyActionPlansPage extends BaseComponent implements OnInit {
     });
 
     return Array.from(mapGroups.values());
+  }
+
+  private buildRiskSummary(plans: CompanyActionPlan[]) {
+    const counts = new Map<string, number>();
+    (plans || []).forEach((plan) => {
+      const raw = plan?.riskTitle ?? '';
+      const label = raw?.toString?.().trim() || 'Risco nao informado';
+      counts.set(label, (counts.get(label) ?? 0) + 1);
+    });
+
+    const ordered = Array.from(counts.entries())
+      .map(([label, count]) => ({ label, count }))
+      .sort((a, b) => b.count - a.count);
+
+    const total = ordered.reduce((acc, item) => acc + item.count, 0);
+    const slices: RiskSlice[] = ordered.map((item, index) => ({
+      label: item.label,
+      count: item.count,
+      color: this.pieColors[index % this.pieColors.length],
+      percent: total ? item.count / total : 0,
+    }));
+
+    return { total, slices };
   }
 
   private createForm(plan: CompanyActionPlan): FormGroup {
