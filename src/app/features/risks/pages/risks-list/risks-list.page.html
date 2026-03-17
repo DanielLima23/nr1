@@ -14,6 +14,15 @@
         <h3>Riscos</h3>
         <p class="subtitle">Gerencie e acesse medidas mitigadoras rapidamente.</p>
       </div>
+      @if (isAdmin) {
+        <button
+          pButton
+          label="Deletar Todos"
+          icon="pi pi-trash"
+          class="p-button-danger"
+          (click)="openDeleteAllConfirm()">
+        </button>
+      }
     </div>
 
     @if (!loading()) {
@@ -102,6 +111,18 @@
   [loading]="confirmLoading"
   (confirm)="confirmDelete()"
   (cancel)="closeDeleteConfirm()">
+</app-confirm-modal>
+
+<app-confirm-modal
+  [visible]="showDeleteAllModal"
+  title="Remover TODOS os riscos?"
+  message="Todos os riscos e suas medidas mitigadoras serão removidos permanentemente."
+  confirmLabel="Remover Todos"
+  cancelLabel="Cancelar"
+  icon="pi pi-exclamation-triangle"
+  [loading]="deleteAllLoading"
+  (confirm)="confirmDeleteAll()"
+  (cancel)="closeDeleteAllConfirm()">
 </app-confirm-modal>
 
 

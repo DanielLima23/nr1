@@ -35,7 +35,10 @@ export class RisksListPage extends BaseComponent implements OnInit {
   selectedTitle = '';
   deletingId: string | null = null;
   readonly isMedico = (this.auth.role || '').toLowerCase() === PERMISSIONS.MEDICO.toLowerCase();
+  readonly isAdmin = (this.auth.role || '').toLowerCase() === PERMISSIONS.ADMINISTRADOR.toLowerCase();
   confirmLoading = false;
+  showDeleteAllModal = false;
+  deleteAllLoading = false;
 
   constructor() {
     super();
@@ -87,6 +90,30 @@ export class RisksListPage extends BaseComponent implements OnInit {
         this.deletingId = null;
         this.confirmLoading = false;
         this.toast.error('Erro ao remover risco.');
+      },
+    });
+  }
+
+  openDeleteAllConfirm() {
+    this.showDeleteAllModal = true;
+    this.deleteAllLoading = false;
+  }
+
+  closeDeleteAllConfirm() {
+    this.showDeleteAllModal = false;
+    this.deleteAllLoading = false;
+  }
+
+  confirmDeleteAll() {
+    this.deleteAllLoading = true;
+    this.service.deleteAll().subscribe({
+      next: () => {
+        this.toast.success('Todos os riscos foram removidos!');
+        this.closeDeleteAllConfirm();
+      },
+      error: () => {
+        this.deleteAllLoading = false;
+        this.toast.error('Erro ao remover riscos.');
       },
     });
   }

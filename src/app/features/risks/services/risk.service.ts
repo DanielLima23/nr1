@@ -57,4 +57,10 @@ export class RiskService extends BaseCrudService {
       tap(() => this.loadAll().subscribe())
     );
   }
+
+  deleteAll(): Observable<any> {
+    return this.delete<any>('risks/all').pipe(
+      tap(() => this.risksSubject.next([]))
+    );
+  }
 }
