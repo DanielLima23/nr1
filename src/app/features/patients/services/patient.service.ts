@@ -94,17 +94,32 @@ export class PatientService extends BaseCrudService {
           
           const jsonData = XLSX.utils.sheet_to_json(firstSheet, { range: headerRowIndex });
           
+          // Normaliza as chaves das linhas (trim nos nomes das colunas)
+          const normalizeRow = (row: any): Record<string, any> => {
+            const normalized: Record<string, any> = {};
+            for (const key of Object.keys(row)) {
+              normalized[key.trim()] = row[key];
+            }
+            return normalized;
+          };
+
+          const getField = (row: Record<string, any>, ...keys: string[]): string => {
+            for (const key of keys) {
+              if (row[key] !== undefined && row[key] !== null) return String(row[key]).trim();
+            }
+            return '';
+          };
+          
           // Converte para o formato esperado pelo backend
           const payload = jsonData
-            .filter((row: any) => {
-              // Filtra linhas que tenham pelo menos o nome preenchido
-              const nome = row.NOME ?? row.Nome ?? row.nome ?? '';
-              return String(nome).trim().length > 0;
+            .map((raw: any) => normalizeRow(raw))
+            .filter((row) => {
+              const nome = getField(row, 'NOME', 'Nome', 'nome');
+              return nome.length > 0;
             })
-            .map((row: any) => {
+            .map((row) => {
             const defaultBirthDate = '2000-01-01';
-            const rawBirthDate =
-              row['DATA DE NASCIMENTO'] ?? row.DataNasc ?? row['Data Nasc'] ?? row['Data Nascimento'] ?? row.DataNascimento ?? row.Nascimento;
+            const rawBirthDate = row['DATA DE NASCIMENTO'] ?? row['DataNasc'] ?? row['Data Nasc'] ?? row['Data Nascimento'] ?? row['DataNascimento'] ?? row['Nascimento'];
             
             const toIsoDate = (date: Date) =>
               `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -114,9 +129,8 @@ export class PatientService extends BaseCrudService {
             if (rawBirthDate instanceof Date && !isNaN(rawBirthDate.getTime())) {
               birthDate = toIsoDate(rawBirthDate);
             } else if (typeof rawBirthDate === 'number') {
-              // Excel armazena datas como números (dias desde 1900-01-01)
               const excelEpoch = new Date(1900, 0, 1);
-              const daysOffset = rawBirthDate - 2; // Ajuste para bug do Excel (1900 não foi ano bissexto)
+              const daysOffset = rawBirthDate - 2;
               const date = new Date(excelEpoch.getTime() + daysOffset * 24 * 60 * 60 * 1000);
               if (!isNaN(date.getTime())) {
                 birthDate = toIsoDate(date);
@@ -132,16 +146,25 @@ export class PatientService extends BaseCrudService {
                 birthDate = dateStr;
               }
             }
+
+            const nome = getField(row, 'NOME', 'Nome', 'nome');
+            const setor = getField(row, 'SETOR', 'Setor', 'setor');
+            const funcao = getField(row, 'FUNÇÃO', 'FUNCAO', 'Função', 'Funcao');
             
             return {
-              sectorName: row.SETOR ?? row.Setor ?? row.setor ?? '',
-              jobFunctionName: row['FUNÇÃO'] ?? row.Função ?? row.Funcao ?? row['FUNCAO'] ?? '',
-              patientName: row.NOME ?? row.Nome ?? row.nome ?? '',
+              sectorName: setor || 'Não informado',
+              jobFunctionName: funcao || 'Não informado',
+              patientName: nome,
               birthDate,
               tenureMonths: 0
             };
           });
           
+          if (payload.length === 0) {
+            observer.error({ error: { message: 'Nenhum colaborador encontrado na planilha. Verifique se a coluna NOME está preenchida.' } });
+            return;
+          }
+
           // Envia para o backend
           this.post<any>(`companies/${companyId}/people/import`, payload).pipe(
             tap(() => this.loadAll(companyId).subscribe())
