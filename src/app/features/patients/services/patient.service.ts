@@ -80,7 +80,19 @@ export class PatientService extends BaseCrudService {
           
           // Pega a primeira planilha
           const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-          const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+          
+          // Encontra a linha do cabeçalho dinamicamente (procura por "NOME")
+          const rawData: any[][] = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+          let headerRowIndex = 0;
+          for (let i = 0; i < Math.min(rawData.length, 10); i++) {
+            const row = rawData[i];
+            if (Array.isArray(row) && row.some((cell: any) => String(cell).trim().toUpperCase() === 'NOME')) {
+              headerRowIndex = i;
+              break;
+            }
+          }
+          
+          const jsonData = XLSX.utils.sheet_to_json(firstSheet, { range: headerRowIndex });
           
           // Converte para o formato esperado pelo backend
           const payload = jsonData
