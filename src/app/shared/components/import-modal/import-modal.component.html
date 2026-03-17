@@ -54,8 +54,18 @@
         }
       </div>
       <small class="help-text">
-        A planilha deve conter as colunas: Setor, Função, Nome, DataNasc (Formato DD/MM/AAAA).
+        A planilha deve conter as colunas: NOME, DATA DE NASCIMENTO, FUNÇÃO, SETOR.
       </small>
+      <div class="download-template">
+        <button
+          pButton
+          type="button"
+          label="Baixar planilha modelo"
+          icon="pi pi-download"
+          class="p-button-outlined p-button-sm"
+          (click)="downloadTemplate()">
+        </button>
+      </div>
     </div>
   </div>
 

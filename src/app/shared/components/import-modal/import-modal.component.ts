@@ -75,4 +75,11 @@ export class ImportModalComponent {
   get isValid(): boolean {
     return !!this.selectedCompanyId && !!this.selectedFile;
   }
+
+  downloadTemplate() {
+    const link = document.createElement('a');
+    link.href = '/assets/planilha-modelo-avaliacoes.xlsx';
+    link.download = 'planilha-modelo-avaliacoes.xlsx';
+    link.click();
+  }
 }

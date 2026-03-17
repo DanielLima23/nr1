@@ -83,10 +83,16 @@ export class PatientService extends BaseCrudService {
           const jsonData = XLSX.utils.sheet_to_json(firstSheet);
           
           // Converte para o formato esperado pelo backend
-          const payload = jsonData.map((row: any) => {
+          const payload = jsonData
+            .filter((row: any) => {
+              // Filtra linhas que tenham pelo menos o nome preenchido
+              const nome = row.NOME ?? row.Nome ?? row.nome ?? '';
+              return String(nome).trim().length > 0;
+            })
+            .map((row: any) => {
             const defaultBirthDate = '2000-01-01';
             const rawBirthDate =
-              row.DataNasc ?? row['Data Nasc'] ?? row['Data Nascimento'] ?? row.DataNascimento ?? row.Nascimento;
+              row['DATA DE NASCIMENTO'] ?? row.DataNasc ?? row['Data Nasc'] ?? row['Data Nascimento'] ?? row.DataNascimento ?? row.Nascimento;
             
             const toIsoDate = (date: Date) =>
               `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -116,9 +122,9 @@ export class PatientService extends BaseCrudService {
             }
             
             return {
-              sectorName: row.Setor || '',
-              jobFunctionName: row.Função || row.Funcao || '',
-              patientName: row.Nome || '',
+              sectorName: row.SETOR ?? row.Setor ?? row.setor ?? '',
+              jobFunctionName: row['FUNÇÃO'] ?? row.Função ?? row.Funcao ?? row['FUNCAO'] ?? '',
+              patientName: row.NOME ?? row.Nome ?? row.nome ?? '',
               birthDate,
               tenureMonths: 0
             };
