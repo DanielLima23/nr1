@@ -1,16 +1,16 @@
+version: "3.9"
+
 services:
-  nr1-web:
+  web:
     build:
       context: .
       dockerfile: Dockerfile
-    image: nr1-web:local
+    container_name: nr1-web
     ports:
-      - "8080:80"
-    container_name: nr1-web-app
+      - "80:80"
     restart: unless-stopped
-    networks:
-      - projectbase_default
 
 networks:
-  projectbase_default:
+  default:
+    name: app-net
     external: true
